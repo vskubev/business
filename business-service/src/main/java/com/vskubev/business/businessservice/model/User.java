@@ -5,21 +5,19 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
-@NoArgsConstructor
-@AllArgsConstructor
 public class User {
 
     /**
      * id
      */
     @Id
-    @Column(name = "user_id", nullable = false, unique = true)
+    @Column(name = "id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userId;
+    private long id;
 
     /**
      * login
@@ -43,27 +41,26 @@ public class User {
      * user email
      */
     @Column(name = "email", length = 100, nullable = false, unique = true)
-    @Email
     private String email;
 
     /**
      * date user created
      */
     @Column(name = "created_at", nullable = false)
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     /**
      * date user updated
      */
     @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
-    public long getUserId() {
-        return userId;
+    public long getId() {
+        return id;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getLogin() {
@@ -98,26 +95,26 @@ public class User {
         this.email = email;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
     public User() {
     }
 
-    public User(String login, String hashPassword, String name, @Email String email, Date createdAt, Date updatedAt) {
+    public User(String login, String hashPassword, String name, @Email String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.login = login;
         this.hashPassword = hashPassword;
         this.name = name;
@@ -129,7 +126,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + userId +
+                "id=" + id +
                 ", login='" + login + '\'' +
                 ", hashPassword='" + hashPassword + '\'' +
                 ", name='" + name + '\'' +

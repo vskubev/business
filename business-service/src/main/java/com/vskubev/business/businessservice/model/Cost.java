@@ -1,76 +1,62 @@
 package com.vskubev.business.businessservice.model;
 
-import com.vskubev.business.businessservice.model.Category;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
 @Table(name = "costs")
-@NoArgsConstructor
-@AllArgsConstructor
 public class Cost {
 
     /**
      * id
      */
     @Id
-    @Column(name = "cost_id", nullable = false, unique = true)
+    @Column(name = "id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long costId;
+    private long id;
 
     /**
      * category id
      */
     @OneToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name="category", nullable = false)
+    @JoinColumn(name="category_id", nullable = false)
     private Category category;
-
-    /**
-     * created by id
-     */
-    @Column(name = "created_by_id", nullable = false)
-    private long createdById;
 
     /**
      * date created category
      */
     @Column(name = "created_at", nullable = false)
-    private Date createdAt;
-
-    /**
-     * updated by id
-     */
-    @Column(name = "updated_by_id", nullable = false)
-    private long updatedById;
+    private LocalDateTime createdAt;
 
     /**
      * date updated category
      */
     @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     /**
      * price of transaction
      */
-    @Column(name = "price", length = 10, nullable = false)
+    @Column(name = "price", nullable = false)
     private long price;
 
     /**
      * owner
      */
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "owner", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
-    public long getCostId() {
-        return costId;
+    public long getId() {
+        return id;
     }
 
-    public void setCostId(long costId) {
-        this.costId = costId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Category getCategory() {
@@ -81,35 +67,19 @@ public class Cost {
         this.category = category;
     }
 
-    public long getCreatedById() {
-        return createdById;
-    }
-
-    public void setCreatedById(long createdById) {
-        this.createdById = createdById;
-    }
-
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public long getUpdatedById() {
-        return updatedById;
-    }
-
-    public void setUpdatedById(long updatedById) {
-        this.updatedById = updatedById;
-    }
-
-    public Date getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -132,11 +102,9 @@ public class Cost {
     public Cost() {
     }
 
-    public Cost(Category category, long createdById, Date createdAt, long updatedById, Date updatedAt, long price, User owner) {
+    public Cost(Category category, LocalDateTime createdAt, LocalDateTime updatedAt, long price, User owner) {
         this.category = category;
-        this.createdById = createdById;
         this.createdAt = createdAt;
-        this.updatedById = updatedById;
         this.updatedAt = updatedAt;
         this.price = price;
         this.owner = owner;
@@ -145,11 +113,9 @@ public class Cost {
     @Override
     public String toString() {
         return "Cost{" +
-                "id=" + costId +
+                "id=" + id +
                 ", category=" + category +
-                ", createdById=" + createdById +
                 ", createdAt=" + createdAt +
-                ", updatedById=" + updatedById +
                 ", updatedAt=" + updatedAt +
                 ", price=" + price +
                 ", owner=" + owner +

@@ -7,9 +7,9 @@ databaseChangeLog:
             tableName: users
             columns:
               - column:
-                  name: user_id
+                  name: id
                   type: long
-                  autoIncrement: true #(надо ли?)
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -51,9 +51,9 @@ databaseChangeLog:
             tableName: categories
             columns:
               - column:
-                  name: category_id
+                  name: id
                   type: long
-                  autoIncrement: true #(надо ли?)
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -65,18 +65,8 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
-                  name: created_by_id
-                  type: long
-                  constraints:
-                    nullable: false
-              - column:
                   name: created_at
                   type: datetime
-                  constraints:
-                    nullable: false
-              - column:
-                  name: updated_by_id
-                  type: long
                   constraints:
                     nullable: false
               - column:
@@ -85,8 +75,8 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: owner
-                  type: #???
+                  name: owner_id
+                  type: long
                   constraints:
                     nullable: false
 
@@ -94,31 +84,21 @@ databaseChangeLog:
             tableName: costs
             columns:
               - column:
-                  name: cost_id
+                  name: id
                   type: long
-                  autoIncrement: true #(надо ли?)
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
                     unique: true
               - column:
                   name: category
-                  type: #???
-                  constraints:
-                    nullable: false
-              - column:
-                  name: created_by_id
                   type: long
                   constraints:
                     nullable: false
               - column:
                   name: created_at
                   type: datetime
-                  constraints:
-                    nullable: false
-              - column:
-                  name: updated_by_id
-                  type: long
                   constraints:
                     nullable: false
               - column:
@@ -132,8 +112,8 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: owner
-                  type: ???
+                  name: owner_id
+                  type: long
                   constraints:
                     nullable: false
 

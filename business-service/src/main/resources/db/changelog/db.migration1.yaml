@@ -1,0 +1,21 @@
+  changeSet:
+    id: addForeignKeyConstraint1
+    author: Skubyev
+   changes:
+     - addForeignKeyConstraint:
+         baseColumnNames: created_by_id
+         baseTableName: users
+         constraintName: fk_users_created_by
+         onDelete: SET NULL
+         onUpdate: CASCADE
+         referencedColumnNames: id
+         referencedTableName: users
+
+     - addForeignKeyConstraint:
+         baseColumnNames: created_by_id
+         baseTableName: category
+         constraintName: fk_category_users_created_by
+         onDelete: SET NULL
+         onUpdate: CASCADE
+         referencedColumnNames: id
+         referencedTableName: users
