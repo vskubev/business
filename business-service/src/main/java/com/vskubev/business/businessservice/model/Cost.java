@@ -20,13 +20,6 @@ public class Cost {
     private long id;
 
     /**
-     * category id
-     */
-    @OneToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name="category_id", nullable = false)
-    private Category category;
-
-    /**
      * date created category
      */
     @Column(name = "created_at", nullable = false)
@@ -43,6 +36,13 @@ public class Cost {
      */
     @Column(name = "price", nullable = false)
     private long price;
+
+    /**
+     * category id
+     */
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name="category_id", nullable = false)
+    private Category category;
 
     /**
      * owner

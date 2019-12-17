@@ -92,11 +92,6 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
-                  name: category
-                  type: long
-                  constraints:
-                    nullable: false
-              - column:
                   name: created_at
                   type: datetime
                   constraints:
@@ -108,6 +103,11 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: price
+                  type: long
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category_id
                   type: long
                   constraints:
                     nullable: false
