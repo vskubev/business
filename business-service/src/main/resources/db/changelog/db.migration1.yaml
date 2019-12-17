@@ -2,20 +2,29 @@
     id: addForeignKeyConstraint1
     author: Skubyev
    changes:
-     - addForeignKeyConstraint:
-         baseColumnNames: created_by_id
-         baseTableName: users
-         constraintName: fk_users_created_by
-         onDelete: SET NULL
-         onUpdate: CASCADE
-         referencedColumnNames: id
-         referencedTableName: users
+       - addForeignKeyConstraint:
+             baseColumnNames: owner_id #колонка в откуда (от category)
+             baseTableName: categories #откуда
+             constraintName: fk_categories_users_id
+             onDelete: SET NULL
+             onUpdate: CASCADE
+             referencedColumnNames: id #колонка в куда (в users)
+             referencedTableName: users #куда
 
-     - addForeignKeyConstraint:
-         baseColumnNames: created_by_id
-         baseTableName: category
-         constraintName: fk_category_users_created_by
-         onDelete: SET NULL
-         onUpdate: CASCADE
-         referencedColumnNames: id
-         referencedTableName: users
+       - addForeignKeyConstraint:
+             baseColumnNames: owner_id
+             baseTableName: costs
+             constraintName: fk_costs_users_id
+             onDelete: SET NULL
+             onUpdate: CASCADE
+             referencedColumnNames: id
+             referencedTableName: users
+
+       - addForeignKeyConstraint:
+             baseColumnNames: category_id
+             baseTableName: costs
+             constraintName: fk_costs_category_id
+             onDelete: SET NULL
+             onUpdate: CASCADE
+             referencedColumnNames: id
+             referencedTableName: categories
