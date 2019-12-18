@@ -1,5 +1,5 @@
 changeSet:
-  id: 3
+  id: create table costs
   author: Skubyev
   changes:
     - createTable:
@@ -18,23 +18,28 @@ changeSet:
               type: datetime
               constraints:
                 nullable: false
+                unique: false
           - column:
               name: updated_at
               type: datetime
               constraints:
                 nullable: false
+                unique: false
           - column:
               name: price
               type: long
               constraints:
                 nullable: false
+                unique: false
           - column:
               name: category_id
               type: long
               constraints:
                 nullable: false
+                unique: false
           - column:
               name: owner_id
               type: long
               constraints:
                 nullable: false
+                unique: false

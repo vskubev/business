@@ -1,5 +1,5 @@
 changeSet:
-  id: 1
+  id: create table users
   author: Skubyev
   changes:
     - createTable:
@@ -24,11 +24,13 @@ changeSet:
               type: varchar(255)
               constraints:
                 nullable: false
+                unique: false
           - column:
               name: name
               type: varchar(255)
               constraints:
                 nullable: false
+                unique: false
           - column:
               name: email
               type: varchar(100)
@@ -40,8 +42,10 @@ changeSet:
               type: datetime
               constraints:
                 nullable: false
+                unique: false
           - column:
               name: updated_at
               type: datetime
               constraints:
                 nullable: false
+                unique: false

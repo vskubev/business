@@ -1,5 +1,5 @@
 changeSet:
-  id: 2
+  id: create table categories
   author: Skubyev
   changes:
     - createTable:
@@ -24,13 +24,16 @@ changeSet:
               type: datetime
               constraints:
                 nullable: false
+                unique: false
           - column:
               name: updated_at
               type: datetime
               constraints:
                 nullable: false
+                unique: false
           - column:
               name: owner_id
               type: long
               constraints:
                 nullable: false
+                unique: false
