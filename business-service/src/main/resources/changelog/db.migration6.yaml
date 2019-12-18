@@ -1,13 +1,13 @@
 databaseChangeLog:
   - changeSet:
-    id: add_foreging_key_from_categories_to_costs
-    author: Skubyev
-    changes:
-      - addForeignKeyConstraint:
-          baseColumnNames: category_id #name foreign key column
-          baseTableName: costs #create foreign key in this table
-          constraintName: fk_costs_category_id
-          onDelete: SET NULL
-          onUpdate: CASCADE
-          referencedColumnNames: id #foreign key column
-          referencedTableName: categories #foreign key from this table
+      id: add_foreging_key_from_categories_to_costs
+      author: Skubyev
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: category_id #name foreign key column
+            baseTableName: costs #create foreign key in this table
+            constraintName: fk_costs_category_id
+            onDelete: SET NULL
+            onUpdate: CASCADE
+            referencedColumnNames: id #foreign key column
+            referencedTableName: categories #foreign key from this table

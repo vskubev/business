@@ -24,13 +24,8 @@ dependencies {
 	runtime 'org.liquibase:liquibase-core'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'org.postgresql:postgresql'
+	implementation 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
-
-	compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
-	compile group: 'org.hibernate', name: 'hibernate-gradle-plugin', version: '5.4.10.Final'
-	compile group: 'org.springframework', name: 'spring-orm', version: '3.0.6.RELEASE'
-	compile group: 'com.zaxxer', name: 'HikariCP', version: '2.3.2'
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
