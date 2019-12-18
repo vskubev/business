@@ -22,12 +22,12 @@ public class CostServiceImpl implements CrudService<Cost> {
     }
 
     @Override
-    public void delete(long id) {
+    public void deleteById(long id) {
         costRepository.deleteById(id);
     }
 
     @Override
     public Cost getById(long id) {
-        return costRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+        return costRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 }

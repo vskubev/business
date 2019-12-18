@@ -4,7 +4,7 @@ public interface CrudService<T> {
 
     T create(T entity);
 
-    void delete(long id);
+    void deleteById(long id);
 
     T getById(long id);
 }

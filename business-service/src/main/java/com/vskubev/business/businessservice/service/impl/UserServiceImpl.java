@@ -22,12 +22,12 @@ public class UserServiceImpl implements CrudService<User> {
     }
 
     @Override
-    public void delete(long id) {
+    public void deleteById(long id) {
         userRepository.deleteById(id);
     }
 
     @Override
     public User getById(long id) {
-        return userRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+        return userRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 }

@@ -22,12 +22,12 @@ public class CategoryServiceImpl implements CrudService<Category> {
     }
 
     @Override
-    public void delete(long id) {
+    public void deleteById(long id) {
         categoryRepository.deleteById(id);
     }
 
     @Override
     public Category getById(long id) {
-        return categoryRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+        return categoryRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 }
