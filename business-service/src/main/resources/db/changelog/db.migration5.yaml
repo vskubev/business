@@ -1,0 +1,12 @@
+changeSet:
+  id: addForeignKeyConstraint2
+  author: Skubyev
+  changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: owner_id
+        baseTableName: costs
+        constraintName: fk_costs_users_id
+        onDelete: SET NULL
+        onUpdate: CASCADE
+        referencedColumnNames: id
+        referencedTableName: users

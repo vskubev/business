@@ -1,0 +1,12 @@
+changeSet:
+  id: addForeignKeyConstraint1
+  author: Skubyev
+  changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: owner_id #колонка в откуда (от category)
+        baseTableName: categories #откуда
+        constraintName: fk_categories_users_id
+        onDelete: SET NULL
+        onUpdate: CASCADE
+        referencedColumnNames: id #колонка в куда (в users)
+        referencedTableName: users #куда

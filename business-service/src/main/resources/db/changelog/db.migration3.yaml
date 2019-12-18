@@ -1,9 +1,9 @@
 changeSet:
-  id: 1
+  id: 3
   author: Skubyev
   changes:
     - createTable:
-        tableName: users
+        tableName: costs
         columns:
           - column:
               name: id
@@ -14,28 +14,6 @@ changeSet:
                 nullable: false
                 unique: true
           - column:
-              name: login
-              type: varchar(50)
-              constraints:
-                nullable: false
-                unique: true
-          - column:
-              name: hash_password
-              type: varchar(255)
-              constraints:
-                nullable: false
-          - column:
-              name: name
-              type: varchar(255)
-              constraints:
-                nullable: false
-          - column:
-              name: email
-              type: varchar(100)
-              constraints:
-                nullable: false
-                unique: true
-          - column:
               name: created_at
               type: datetime
               constraints:
@@ -43,5 +21,20 @@ changeSet:
           - column:
               name: updated_at
               type: datetime
+              constraints:
+                nullable: false
+          - column:
+              name: price
+              type: long
+              constraints:
+                nullable: false
+          - column:
+              name: category_id
+              type: long
+              constraints:
+                nullable: false
+          - column:
+              name: owner_id
+              type: long
               constraints:
                 nullable: false

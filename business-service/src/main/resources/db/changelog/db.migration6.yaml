@@ -1,0 +1,12 @@
+changeSet:
+  id: addForeignKeyConstraint3
+  author: Skubyev
+  changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: category_id
+        baseTableName: costs
+        constraintName: fk_costs_category_id
+        onDelete: SET NULL
+        onUpdate: CASCADE
+        referencedColumnNames: id
+        referencedTableName: categories
