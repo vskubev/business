@@ -7,6 +7,9 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+/**
+ * @author skubev
+ */
 @Entity
 @Table(name = "costs")
 public class Cost {
@@ -35,7 +38,7 @@ public class Cost {
      * price of transaction
      */
     @Column(name = "price", nullable = false)
-    private long price;
+    private double price;
 
     /**
      * category id
@@ -83,11 +86,11 @@ public class Cost {
         this.updatedAt = updatedAt;
     }
 
-    public long getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -102,7 +105,7 @@ public class Cost {
     public Cost() {
     }
 
-    public Cost(Category category, LocalDateTime createdAt, LocalDateTime updatedAt, long price, User owner) {
+    public Cost(Category category, LocalDateTime createdAt, LocalDateTime updatedAt, double price, User owner) {
         this.category = category;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;

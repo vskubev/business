@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * @author skubev
+ */
 @Entity
 @Table(name = "categories")
 public class Category {

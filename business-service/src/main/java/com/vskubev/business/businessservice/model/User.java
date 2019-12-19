@@ -7,6 +7,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 
+/**
+ * @author skubev
+ */
 @Entity
 @Table(name = "users")
 public class User {

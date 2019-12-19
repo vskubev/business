@@ -17,3 +17,6 @@ databaseChangeLog:
 - include:
     file: changelog/db.migration6.yaml
     relativeToChangelogFile: false
+- include:
+      file: changelog/db.migration7.yaml
+      relativeToChangelogFile: false

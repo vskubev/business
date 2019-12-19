@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
 
+/**
+ * @author skubev
+ */
 @Service
 public class CategoryServiceImpl implements CrudService<Category> {
 
