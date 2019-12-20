@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -37,8 +38,8 @@ public class Cost {
     /**
      * price of transaction
      */
-    @Column(name = "price", nullable = false)
-    private double price;
+    @Column(name = "price", nullable = false, precision=19, scale=4)
+    private BigDecimal price;
 
     /**
      * category id
@@ -86,11 +87,11 @@ public class Cost {
         this.updatedAt = updatedAt;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -105,7 +106,7 @@ public class Cost {
     public Cost() {
     }
 
-    public Cost(Category category, LocalDateTime createdAt, LocalDateTime updatedAt, double price, User owner) {
+    public Cost(Category category, LocalDateTime createdAt, LocalDateTime updatedAt, BigDecimal price, User owner) {
         this.category = category;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
