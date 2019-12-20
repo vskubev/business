@@ -1,5 +1,6 @@
 package com.vskubev.business.businessservice.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -30,20 +31,22 @@ public class Category {
     /**
      * date created category
      */
-    @Column(name = "created_at", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "created_at", nullable = false, unique = false)
     private LocalDateTime createdAt;
 
     /**
      * date updated category
      */
-    @Column(name = "updated_at", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "updated_at", nullable = false, unique = false)
     private LocalDateTime updatedAt;
 
     /**
      * owner
      */
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "owner_id", nullable = false)
+    @JoinColumn(name = "owner_id", nullable = false, unique = false)
     private User owner;
 
     public long getId() {

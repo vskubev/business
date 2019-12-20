@@ -1,5 +1,6 @@
 package com.vskubev.business.businessservice.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -49,12 +50,14 @@ public class User {
     /**
      * date user created
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     /**
      * date user updated
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 

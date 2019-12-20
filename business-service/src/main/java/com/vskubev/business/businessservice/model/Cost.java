@@ -1,5 +1,6 @@
 package com.vskubev.business.businessservice.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -26,33 +27,35 @@ public class Cost {
     /**
      * date created category
      */
-    @Column(name = "created_at", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "created_at", nullable = false, unique = false)
     private LocalDateTime createdAt;
 
     /**
      * date updated category
      */
-    @Column(name = "updated_at", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "updated_at", nullable = false, unique = false)
     private LocalDateTime updatedAt;
 
     /**
      * price of transaction
      */
-    @Column(name = "price", nullable = false, precision=19, scale=4)
+    @Column(name = "price", nullable = false, unique = false, precision=19, scale=4)
     private BigDecimal price;
 
     /**
      * category id
      */
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name="category_id", nullable = false)
+    @JoinColumn(name="category_id", nullable = false, unique = false)
     private Category category;
 
     /**
      * owner
      */
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "owner_id", nullable = false)
+    @JoinColumn(name = "owner_id", nullable = false, unique = false)
     private User owner;
 
     public long getId() {
