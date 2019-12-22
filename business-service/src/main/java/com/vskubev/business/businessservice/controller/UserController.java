@@ -5,6 +5,7 @@ import com.vskubev.business.businessservice.service.impl.UserServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author skubev
@@ -31,6 +32,11 @@ public class UserController {
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
     public User getUser(@PathVariable("userId") long userId) {
         return userService.getById(userId);
+    }
+
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    public List<User> getUsers() {
+        return userService.getUsers();
     }
 
 }
