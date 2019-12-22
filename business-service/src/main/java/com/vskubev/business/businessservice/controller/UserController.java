@@ -18,19 +18,19 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
-    public User getUser(@PathVariable long userId) {
-        return userService.getById(userId);
-    }
-
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     public User createUser(@Valid @RequestBody User user) {
         return userService.create(user);
     }
 
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.DELETE)
-    public void deleteUser(@PathVariable long userId) {
+    public void deleteUser(@PathVariable("userId") long userId) {
         userService.deleteById(userId);
+    }
+
+    @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
+    public User getUser(@PathVariable("userId") long userId) {
+        return userService.getById(userId);
     }
 
 }

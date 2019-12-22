@@ -18,18 +18,19 @@ public class CostController {
         this.costService = costService;
     }
 
-    @RequestMapping(value = "/costs/{costId}", method = RequestMethod.GET)
-    public Cost getCost(@PathVariable long costId) {
-        return costService.getById(costId);
-    }
-
     @RequestMapping(value = "/costs", method = RequestMethod.POST)
     public Cost createCost(@Valid @RequestBody Cost cost) {
         return costService.create(cost);
     }
 
     @RequestMapping(value = "/costs/{costId}", method = RequestMethod.DELETE)
-    public void deleteUser(@PathVariable long costId) {
+    public void deleteUser(@PathVariable("costId") long costId) {
         costService.deleteById(costId);
     }
+
+    @RequestMapping(value = "/costs/{costId}", method = RequestMethod.GET)
+    public Cost getCost(@PathVariable("costId") long costId) {
+        return costService.getById(costId);
+    }
+
 }

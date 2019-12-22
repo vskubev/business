@@ -1,10 +1,12 @@
 package com.vskubev.business.businessservice.service.impl;
 
 import com.vskubev.business.businessservice.model.Category;
+import com.vskubev.business.businessservice.model.User;
 import com.vskubev.business.businessservice.repository.CategoryRepository;
 import com.vskubev.business.businessservice.service.CrudService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 /**
@@ -20,8 +22,15 @@ public class CategoryServiceImpl implements CrudService<Category> {
     }
 
     @Override
-    public Category create(Category entity) {
-        return categoryRepository.saveAndFlush(entity);
+    public Category create(Category category) {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        category.setCreatedAt(localDateTime);
+        category.setUpdatedAt(localDateTime);
+
+        User user = category.getOwner();
+        category.setOwner(user);
+
+        return categoryRepository.saveAndFlush(category);
     }
 
     @Override
