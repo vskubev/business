@@ -5,6 +5,7 @@ import com.vskubev.business.businessservice.repository.CostRepository;
 import com.vskubev.business.businessservice.service.CrudService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 /**
@@ -21,6 +22,10 @@ public class CostServiceImpl implements CrudService<Cost> {
 
     @Override
     public Cost create(Cost entity) {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        entity.setCreatedAt(localDateTime);
+        entity.setUpdatedAt(localDateTime);
+
         return costRepository.saveAndFlush(entity);
     }
 

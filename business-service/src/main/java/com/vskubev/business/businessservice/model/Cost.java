@@ -47,14 +47,14 @@ public class Cost {
     /**
      * category id
      */
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE) //{CascadeType.MERGE, CascadeType.PERSIST}
     @JoinColumn(name="category_id", nullable = false, unique = false)
     private Category category;
 
     /**
      * owner
      */
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE) //{CascadeType.MERGE, CascadeType.PERSIST}
     @JoinColumn(name = "owner_id", nullable = false, unique = false)
     private User owner;
 

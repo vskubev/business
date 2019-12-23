@@ -27,9 +27,6 @@ public class CategoryServiceImpl implements CrudService<Category> {
         category.setCreatedAt(localDateTime);
         category.setUpdatedAt(localDateTime);
 
-        User user = category.getOwner();
-        category.setOwner(user);
-
         return categoryRepository.saveAndFlush(category);
     }
 

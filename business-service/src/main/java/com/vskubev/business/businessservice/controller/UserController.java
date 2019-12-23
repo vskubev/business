@@ -14,14 +14,16 @@ import java.util.List;
 public class UserController {
 
     private final UserServiceImpl userService;
+    private final UserMapper userMapper;
 
-    public UserController(UserServiceImpl userService) {
+    public UserController(UserServiceImpl userService, UserMapper userMapper) {
         this.userService = userService;
+        this.userMapper = userMapper;
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
-    public User createUser(@Valid @RequestBody User user) {
-        return userService.create(user);
+    public UserDTO createUser(@Valid @RequestBody UserDTO userDTO) {
+        return userService.create(userDTO);
     }
 
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.DELETE)
@@ -30,12 +32,12 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
-    public User getUser(@PathVariable("userId") long userId) {
+    public UserDTO getUser(@PathVariable("userId") long userId) {
         return userService.getById(userId);
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public List<User> getUsers() {
+    public List<UserDTO> getUsers() {
         return userService.getUsers();
     }
 
