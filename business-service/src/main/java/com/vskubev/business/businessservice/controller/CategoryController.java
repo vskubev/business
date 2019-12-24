@@ -1,7 +1,6 @@
 package com.vskubev.business.businessservice.controller;
 
-import com.vskubev.business.businessservice.model.Category;
-import com.vskubev.business.businessservice.model.User;
+import com.vskubev.business.businessservice.map.CategoryDTO;
 import com.vskubev.business.businessservice.service.impl.CategoryServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +19,8 @@ public class CategoryController {
     }
 
     @RequestMapping(value = "/categories", method = RequestMethod.POST)
-    public Category createCategory(@Valid @RequestBody Category category) {
-        return categoryService.create(category);
+    public CategoryDTO createCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
+        return categoryService.create(categoryDTO);
     }
 
     @RequestMapping(value = "/categories/{categoryId}", method = RequestMethod.DELETE)
@@ -30,7 +29,7 @@ public class CategoryController {
     }
 
     @RequestMapping(value = "/categories/{categoryId}", method = RequestMethod.GET)
-    public Category getCategory(@PathVariable("categoryId") long categoryId) {
+    public CategoryDTO getCategory(@PathVariable("categoryId") long categoryId) {
         return categoryService.getById(categoryId);
     }
 

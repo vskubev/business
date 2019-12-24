@@ -1,8 +1,6 @@
 package com.vskubev.business.businessservice.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -45,7 +43,7 @@ public class Category {
     /**
      * owner
      */
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE) //{CascadeType.MERGE, CascadeType.PERSIST}
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "owner_id", nullable = false, unique = false)
     private User owner;
 

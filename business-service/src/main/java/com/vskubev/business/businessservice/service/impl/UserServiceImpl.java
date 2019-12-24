@@ -41,6 +41,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
 
     @Override
     public void deleteById(long id) {
+        userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
         userRepository.deleteById(id);
     }
 
@@ -51,14 +52,11 @@ public class UserServiceImpl implements CrudService<UserDTO> {
     }
 
     public List<UserDTO> getUsers() {
-        List<User> users = new ArrayList<>();
+        List<User> users;
         List<UserDTO> usersDTO = new ArrayList<>();
         users = userRepository.findAll();
 
-        /*
-         * конвертер users to usersDTO
-         */
-        for (User user: users) {
+        for (User user : users) {
             usersDTO.add(userMapper.toDto(user));
         }
         return usersDTO;
@@ -69,13 +67,30 @@ public class UserServiceImpl implements CrudService<UserDTO> {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
+        if (userDTO.getLogin() == null
+                || userDTO.getLogin().isEmpty()
+                || !userDTO.getLogin().matches("^[a-zA-Z0-9]+([._]?[a-zA-Z0-9]+)*$")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Login is incorrect");
+        }
+
+        if (userDTO.getPassword() == null
+                || userDTO.getPassword().isEmpty()
+                || !userDTO.getPassword().matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is incorrect. " +
+                    "At least one upper case English letter, one lower case English letter, one digit, minimum eight in length");
+        }
+
+        if (userDTO.getName() == null
+                || userDTO.getName().isEmpty()
+                || !userDTO.getName().matches("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is incorrect");
+        }
+
         if (userDTO.getEmail() == null
                 || userDTO.getEmail().isEmpty()
-                || !userDTO.getEmail().matches("^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$\n")) {
+                || !userDTO.getEmail().matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The email is incorrect");
         }
-        /**
-         * .... продолжи сам
-         */
     }
+
 }

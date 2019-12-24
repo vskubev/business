@@ -1,13 +1,10 @@
 package com.vskubev.business.businessservice.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * @author skubev
@@ -41,14 +38,14 @@ public class Cost {
     /**
      * price of transaction
      */
-    @Column(name = "price", nullable = false, unique = false, precision=19, scale=4)
+    @Column(name = "price", nullable = false, unique = false, precision = 19, scale = 4)
     private BigDecimal price;
 
     /**
      * category id
      */
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE) //{CascadeType.MERGE, CascadeType.PERSIST}
-    @JoinColumn(name="category_id", nullable = false, unique = false)
+    @JoinColumn(name = "category_id", nullable = false, unique = false)
     private Category category;
 
     /**
