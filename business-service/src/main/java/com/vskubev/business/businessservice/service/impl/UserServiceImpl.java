@@ -1,7 +1,7 @@
 package com.vskubev.business.businessservice.service.impl;
 
-import com.vskubev.business.businessservice.controller.UserDTO;
-import com.vskubev.business.businessservice.controller.UserMapper;
+import com.vskubev.business.businessservice.map.UserDTO;
+import com.vskubev.business.businessservice.map.UserMapper;
 import com.vskubev.business.businessservice.model.User;
 import com.vskubev.business.businessservice.repository.UserRepository;
 import com.vskubev.business.businessservice.service.CrudService;
@@ -12,7 +12,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 /**
  * @author skubev
@@ -36,10 +35,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
     @Override
     public UserDTO create(UserDTO userDTO) {
         LocalDateTime localDateTime = LocalDateTime.now();
-
-        /**
-         * здесь, вероятно, надо как то создать юзера на основе юезрДТО
-         */
+        User user = userMapper.toEntity(userDTO);
 
         user.setCreatedAt(localDateTime);
         user.setUpdatedAt(localDateTime);

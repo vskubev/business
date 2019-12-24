@@ -1,6 +1,7 @@
 package com.vskubev.business.businessservice.controller;
 
-import com.vskubev.business.businessservice.model.User;
+import com.vskubev.business.businessservice.map.UserDTO;
+import com.vskubev.business.businessservice.map.UserMapper;
 import com.vskubev.business.businessservice.service.impl.UserServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
