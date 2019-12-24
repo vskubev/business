@@ -19,7 +19,8 @@ public class UserMapper {
                 entity.getName(),
                 entity.getEmail(),
                 entity.getCreatedAt(),
-                entity.getUpdatedAt());
+                entity.getUpdatedAt()
+        );
         return userDTO;
     }
 
@@ -30,7 +31,8 @@ public class UserMapper {
                 userDTO.getName(),
                 userDTO.getEmail(),
                 userDTO.getCreatedAt(),
-                userDTO.getUpdatedAt());
+                userDTO.getUpdatedAt()
+        );
         return user;
     }
 

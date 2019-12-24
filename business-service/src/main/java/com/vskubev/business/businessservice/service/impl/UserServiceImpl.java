@@ -18,29 +18,25 @@ import java.util.List;
  */
 @Service
 public class UserServiceImpl implements CrudService<UserDTO> {
-
     private final UserRepository userRepository;
-    private final UserDTO userDTO;
     private final UserMapper userMapper;
 
-    /**
-     * Еще есть сомнения по поводу таких конструкторов и их жизнеспособности
-     */
-    public UserServiceImpl(UserRepository userRepository, UserDTO userDTO, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
-        this.userDTO = userDTO;
         this.userMapper = userMapper;
     }
 
     @Override
     public UserDTO create(UserDTO userDTO) {
-        LocalDateTime localDateTime = LocalDateTime.now();
+        checkInput(userDTO);
+
         User user = userMapper.toEntity(userDTO);
 
+        LocalDateTime localDateTime = LocalDateTime.now();
         user.setCreatedAt(localDateTime);
         user.setUpdatedAt(localDateTime);
-        User user1 = userRepository.saveAndFlush(user);
-        return userMapper.toDto(user1);
+
+        return userMapper.toDto(userRepository.saveAndFlush(user));
     }
 
     @Override
@@ -59,7 +55,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
         List<UserDTO> usersDTO = new ArrayList<>();
         users = userRepository.findAll();
 
-        /**
+        /*
          * конвертер users to usersDTO
          */
         for (User user: users) {
@@ -68,4 +64,18 @@ public class UserServiceImpl implements CrudService<UserDTO> {
         return usersDTO;
     }
 
+    private void checkInput(UserDTO userDTO) {
+        if (userDTO == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        if (userDTO.getEmail() == null
+                || userDTO.getEmail().isEmpty()
+                || !userDTO.getEmail().matches("^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$\n")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The email is incorrect");
+        }
+        /**
+         * .... продолжи сам
+         */
+    }
 }

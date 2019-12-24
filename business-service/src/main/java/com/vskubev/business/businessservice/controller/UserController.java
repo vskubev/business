@@ -1,7 +1,6 @@
 package com.vskubev.business.businessservice.controller;
 
 import com.vskubev.business.businessservice.map.UserDTO;
-import com.vskubev.business.businessservice.map.UserMapper;
 import com.vskubev.business.businessservice.service.impl.UserServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,11 +14,9 @@ import java.util.List;
 public class UserController {
 
     private final UserServiceImpl userService;
-    private final UserMapper userMapper;
 
-    public UserController(UserServiceImpl userService, UserMapper userMapper) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
-        this.userMapper = userMapper;
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
