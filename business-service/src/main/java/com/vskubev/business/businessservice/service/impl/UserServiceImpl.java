@@ -1,5 +1,6 @@
 package com.vskubev.business.businessservice.service.impl;
 
+import com.vskubev.business.businessservice.map.CategoryDTO;
 import com.vskubev.business.businessservice.map.UserDTO;
 import com.vskubev.business.businessservice.map.UserMapper;
 import com.vskubev.business.businessservice.model.User;
@@ -56,10 +57,9 @@ public class UserServiceImpl implements CrudService<UserDTO> {
                 .collect(Collectors.toList());
     }
 
-//    public User getUserByCategoryId(long categoryId) {
-//        long ownerId = categoryService.getById(categoryId).getOwnerId();
-//        return userMapper.toEntity(getById(ownerId));
-//    }
+    public User getUserByCategoryDTO(CategoryDTO categoryDTO) {
+        return userMapper.toEntity(getById(categoryDTO.getOwnerId()));
+    }
 
     private void checkInput(UserDTO userDTO) {
         if (userDTO == null) {
