@@ -29,6 +29,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
     @Override
     public UserDTO create(UserDTO userDTO) {
         checkInput(userDTO);
+        checkUserExists(userDTO);
 
         User user = userMapper.toEntity(userDTO);
 
@@ -86,6 +87,34 @@ public class UserServiceImpl implements CrudService<UserDTO> {
                 || !userDTO.getEmail().matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email is incorrect");
         }
+    }
+
+    private void checkUserExists(UserDTO userDTO) {
+        if (!UniqueUsernameValidator(userDTO)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with this login is already exists");
+        }
+
+        if (!UniqueEmailValidator(userDTO)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with this email is already exists");
+        }
+    }
+
+    private boolean UniqueUsernameValidator(UserDTO userDTO) {
+        String login = userDTO.getLogin();
+
+        for (UserDTO user: getUsers()) {
+            if (user.getLogin().equals(login)) return false;
+        }
+        return true;
+    }
+
+    private boolean UniqueEmailValidator(UserDTO userDTO) {
+        String email = userDTO.getEmail();
+
+        for (UserDTO user: getUsers()) {
+            if (user.getEmail().equals(email)) return false;
+        }
+        return true;
     }
 
 }

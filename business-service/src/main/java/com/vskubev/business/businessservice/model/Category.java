@@ -43,7 +43,7 @@ public class Category {
     /**
      * owner
      */
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "owner_id", nullable = false, unique = false)
     private User owner;
 

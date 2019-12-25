@@ -5,6 +5,7 @@ import com.vskubev.business.businessservice.service.impl.CategoryServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author skubev
@@ -31,6 +32,11 @@ public class CategoryController {
     @RequestMapping(value = "/categories/{categoryId}", method = RequestMethod.GET)
     public CategoryDTO getCategory(@PathVariable("categoryId") long categoryId) {
         return categoryService.getById(categoryId);
+    }
+
+    @RequestMapping(value = "/categories", method = RequestMethod.GET)
+    public List<CategoryDTO> getCategories() {
+        return categoryService.getCategories();
     }
 
 }

@@ -30,6 +30,7 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     @Override
     public CategoryDTO create(CategoryDTO categoryDTO) {
         checkInput(categoryDTO);
+        checkCategoryExists(categoryDTO);
 
         Category category = categoryMapper.toEntity(categoryDTO);
 
@@ -68,5 +69,20 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "The category name is incorrect. At least one upper case English letter.");
         }
+    }
+
+    private void checkCategoryExists(CategoryDTO categoryDTO) {
+        if (!UniqueCategoryNameValidator(categoryDTO)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category with this name is already exists");
+        }
+    }
+
+    private boolean UniqueCategoryNameValidator(CategoryDTO categoryDTO) {
+        String categoryName = categoryDTO.getName();
+
+        for (CategoryDTO category: getCategories()) {
+            if (category.getName().equals(categoryName)) return false;
+        }
+        return true;
     }
 }
