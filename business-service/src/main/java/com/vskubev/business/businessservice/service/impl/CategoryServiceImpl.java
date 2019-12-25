@@ -37,7 +37,7 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
         category.setCreatedAt(localDateTime);
         category.setUpdatedAt(localDateTime);
 
-        return categoryMapper.toDto(categoryRepository.saveAndFlush(category));
+        return categoryMapper.toDto(categoryRepository.save(category));
     }
 
     @Override
@@ -53,7 +53,7 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
 
     public List<CategoryDTO> getCategories() {
         return categoryRepository.findAll().stream()
-                .map(it -> categoryMapper.toDto(it))
+                .map(categoryMapper::toDto)
                 .collect(Collectors.toList());
     }
 

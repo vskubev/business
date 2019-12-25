@@ -1,6 +1,5 @@
 package com.vskubev.business.businessservice.service.impl;
 
-import com.vskubev.business.businessservice.map.CategoryDTO;
 import com.vskubev.business.businessservice.map.UserDTO;
 import com.vskubev.business.businessservice.map.UserMapper;
 import com.vskubev.business.businessservice.model.User;
@@ -47,18 +46,15 @@ public class UserServiceImpl implements CrudService<UserDTO> {
 
     @Override
     public UserDTO getById(long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
         return userMapper.toDto(user);
     }
 
     public List<UserDTO> getUsers() {
         return userRepository.findAll().stream()
-                .map(it -> userMapper.toDto(it))
+                .map(userMapper::toDto)
                 .collect(Collectors.toList());
-    }
-
-    public User getUserByCategoryDTO(CategoryDTO categoryDTO) {
-        return userMapper.toEntity(getById(categoryDTO.getOwnerId()));
     }
 
     private void checkInput(UserDTO userDTO) {

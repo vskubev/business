@@ -2,8 +2,10 @@ package com.vskubev.business.businessservice.map;
 
 import com.vskubev.business.businessservice.model.Category;
 import com.vskubev.business.businessservice.model.User;
-import com.vskubev.business.businessservice.service.impl.UserServiceImpl;
+import com.vskubev.business.businessservice.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotNull;
 
@@ -12,13 +14,10 @@ import javax.validation.constraints.NotNull;
  */
 @Component
 public class CategoryMapper {
+    private final UserRepository userRepository;
 
-    private final UserServiceImpl userService;
-    private final UserMapper userMapper;
-
-    public CategoryMapper(UserServiceImpl userService, UserMapper userMapper) {
-        this.userService = userService;
-        this.userMapper = userMapper;
+    public CategoryMapper(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public CategoryDTO toDto(@NotNull Category entity) {
@@ -33,7 +32,8 @@ public class CategoryMapper {
     }
 
     public Category toEntity(CategoryDTO categoryDTO) {
-        User owner = userService.getUserByCategoryDTO(categoryDTO);
+        User owner = userRepository.findById(categoryDTO.getOwnerId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "..."));
 
         Category category = new Category(
                 categoryDTO.getName(),
