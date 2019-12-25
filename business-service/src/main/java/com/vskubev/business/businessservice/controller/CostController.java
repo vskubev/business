@@ -1,10 +1,11 @@
 package com.vskubev.business.businessservice.controller;
 
-import com.vskubev.business.businessservice.model.Cost;
+import com.vskubev.business.businessservice.map.CostDTO;
 import com.vskubev.business.businessservice.service.impl.CostServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author skubev
@@ -19,8 +20,8 @@ public class CostController {
     }
 
     @RequestMapping(value = "/costs", method = RequestMethod.POST)
-    public Cost createCost(@Valid @RequestBody Cost cost) {
-        return costService.create(cost);
+    public CostDTO createCost(@Valid @RequestBody CostDTO costDTO) {
+        return costService.create(costDTO);
     }
 
     @RequestMapping(value = "/costs/{costId}", method = RequestMethod.DELETE)
@@ -29,8 +30,13 @@ public class CostController {
     }
 
     @RequestMapping(value = "/costs/{costId}", method = RequestMethod.GET)
-    public Cost getCost(@PathVariable("costId") long costId) {
+    public CostDTO getCost(@PathVariable("costId") long costId) {
         return costService.getById(costId);
+    }
+
+    @RequestMapping(value = "/costs", method = RequestMethod.GET)
+    public List<CostDTO> getAllCosts() {
+        return costService.getAllCosts();
     }
 
 }

@@ -24,7 +24,7 @@ public class UserMapper {
         return userDTO;
     }
 
-    public User toEntity(UserDTO userDTO) {
+    public User toEntity(@NotNull UserDTO userDTO) {
         User user = new User(
                 userDTO.getLogin(),
                 userDTO.getPassword(),

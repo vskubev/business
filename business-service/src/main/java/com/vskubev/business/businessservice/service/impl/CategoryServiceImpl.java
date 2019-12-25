@@ -48,7 +48,8 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
 
     @Override
     public CategoryDTO getById(long id) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found"));
+        Category category = categoryRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found"));
         return categoryMapper.toDto(category);
     }
 
@@ -80,8 +81,10 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     private boolean UniqueCategoryNameValidator(CategoryDTO categoryDTO) {
         String categoryName = categoryDTO.getName();
 
-        for (CategoryDTO category: getCategories()) {
-            if (category.getName().equals(categoryName)) return false;
+        for (CategoryDTO category : getCategories()) {
+            if (category.getName().equals(categoryName)) {
+                return false;
+            }
         }
         return true;
     }

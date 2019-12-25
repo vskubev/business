@@ -31,7 +31,7 @@ public class CategoryMapper {
         return categoryDTO;
     }
 
-    public Category toEntity(CategoryDTO categoryDTO) {
+    public Category toEntity(@NotNull CategoryDTO categoryDTO) {
         User owner = userRepository.findById(categoryDTO.getOwnerId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
 

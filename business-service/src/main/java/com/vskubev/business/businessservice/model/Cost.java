@@ -106,11 +106,11 @@ public class Cost {
     public Cost() {
     }
 
-    public Cost(Category category, LocalDateTime createdAt, LocalDateTime updatedAt, BigDecimal price, User owner) {
-        this.category = category;
+    public Cost(LocalDateTime createdAt, LocalDateTime updatedAt, BigDecimal price, Category category, User owner) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.price = price;
+        this.category = category;
         this.owner = owner;
     }
 
@@ -118,10 +118,10 @@ public class Cost {
     public String toString() {
         return "Cost{" +
                 "id=" + id +
-                ", category=" + category +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", price=" + price +
+                ", category=" + category +
                 ", owner=" + owner +
                 '}';
     }
