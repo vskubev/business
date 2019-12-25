@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author skubev
@@ -41,7 +41,6 @@ public class UserServiceImpl implements CrudService<UserDTO> {
 
     @Override
     public void deleteById(long id) {
-        userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
         userRepository.deleteById(id);
     }
 
@@ -52,15 +51,15 @@ public class UserServiceImpl implements CrudService<UserDTO> {
     }
 
     public List<UserDTO> getUsers() {
-        List<User> users;
-        List<UserDTO> usersDTO = new ArrayList<>();
-        users = userRepository.findAll();
-
-        for (User user : users) {
-            usersDTO.add(userMapper.toDto(user));
-        }
-        return usersDTO;
+        return userRepository.findAll().stream()
+                .map(it -> userMapper.toDto(it))
+                .collect(Collectors.toList());
     }
+
+//    public User getUserByCategoryId(long categoryId) {
+//        long ownerId = categoryService.getById(categoryId).getOwnerId();
+//        return userMapper.toEntity(getById(ownerId));
+//    }
 
     private void checkInput(UserDTO userDTO) {
         if (userDTO == null) {
@@ -89,7 +88,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
         if (userDTO.getEmail() == null
                 || userDTO.getEmail().isEmpty()
                 || !userDTO.getEmail().matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The email is incorrect");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email is incorrect");
         }
     }
 

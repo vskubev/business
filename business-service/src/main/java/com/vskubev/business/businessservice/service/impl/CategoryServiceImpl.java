@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author skubev
@@ -40,7 +42,6 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
 
     @Override
     public void deleteById(long id) {
-        categoryRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found"));
         categoryRepository.deleteById(id);
     }
 
@@ -48,6 +49,12 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     public CategoryDTO getById(long id) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found"));
         return categoryMapper.toDto(category);
+    }
+
+    public List<CategoryDTO> getCategories() {
+        return categoryRepository.findAll().stream()
+                .map(it -> categoryMapper.toDto(it))
+                .collect(Collectors.toList());
     }
 
     private void checkInput(CategoryDTO categoryDTO) {
@@ -59,7 +66,7 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
                 || categoryDTO.getName().isEmpty()
                 || !categoryDTO.getName().matches("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Name is incorrect. At least one upper case English letter");
+                    "The category name is incorrect. At least one upper case English letter.");
         }
     }
 }

@@ -13,6 +13,12 @@ import javax.validation.constraints.NotNull;
 @Component
 public class CategoryMapper {
 
+//    private final UserServiceImpl userService;
+//
+//    public CategoryMapper(UserServiceImpl userService) {
+//        this.userService = userService;
+//    }
+
     private final UserServiceImpl userService;
     private final UserMapper userMapper;
 
@@ -33,7 +39,9 @@ public class CategoryMapper {
     }
 
     public Category toEntity(CategoryDTO categoryDTO) {
+        //User owner = userService.getUserByCategoryId(categoryDTO.getId());
         User owner = obtainCategory(categoryDTO);
+
 
         Category category = new Category(
                 categoryDTO.getName(),
