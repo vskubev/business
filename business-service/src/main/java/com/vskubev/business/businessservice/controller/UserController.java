@@ -2,6 +2,8 @@ package com.vskubev.business.businessservice.controller;
 
 import com.vskubev.business.businessservice.map.UserDTO;
 import com.vskubev.business.businessservice.service.impl.UserServiceImpl;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,23 +22,32 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
-    public UserDTO createUser(@Valid @RequestBody UserDTO userDTO) {
-        return userService.create(userDTO);
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(userService.create(userDTO));
     }
 
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.DELETE)
-    public void deleteUser(@PathVariable("userId") long userId) {
-        userService.deleteById(userId);
+    public ResponseEntity<?> deleteUser(@PathVariable("userId") long id) {
+        userService.deleteById(id);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
-    public UserDTO getUser(@PathVariable("userId") long userId) {
-        return userService.getById(userId);
+    public ResponseEntity<UserDTO> getUser(@PathVariable("userId") long userId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userService.getById(userId));
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public List<UserDTO> getUsers() {
-        return userService.getUsers();
+    public ResponseEntity<List<UserDTO>> getUsers() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userService.getUsers());
     }
 
 }

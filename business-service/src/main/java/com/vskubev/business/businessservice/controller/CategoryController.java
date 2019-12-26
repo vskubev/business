@@ -2,6 +2,8 @@ package com.vskubev.business.businessservice.controller;
 
 import com.vskubev.business.businessservice.map.CategoryDTO;
 import com.vskubev.business.businessservice.service.impl.CategoryServiceImpl;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,23 +22,32 @@ public class CategoryController {
     }
 
     @RequestMapping(value = "/categories", method = RequestMethod.POST)
-    public CategoryDTO createCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
-        return categoryService.create(categoryDTO);
+    public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(categoryService.create(categoryDTO));
     }
 
     @RequestMapping(value = "/categories/{categoryId}", method = RequestMethod.DELETE)
-    public void deleteCategory(@PathVariable("categoryId") long categoryId) {
+    public ResponseEntity<?> deleteCategory(@PathVariable("categoryId") long categoryId) {
         categoryService.deleteById(categoryId);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
     @RequestMapping(value = "/categories/{categoryId}", method = RequestMethod.GET)
-    public CategoryDTO getCategory(@PathVariable("categoryId") long categoryId) {
-        return categoryService.getById(categoryId);
+    public ResponseEntity<CategoryDTO> getCategory(@PathVariable("categoryId") long categoryId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(categoryService.getById(categoryId));
     }
 
     @RequestMapping(value = "/categories", method = RequestMethod.GET)
-    public List<CategoryDTO> getCategories() {
-        return categoryService.getCategories();
+    public ResponseEntity<List<CategoryDTO>> getCategories() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(categoryService.getCategories());
     }
 
 }

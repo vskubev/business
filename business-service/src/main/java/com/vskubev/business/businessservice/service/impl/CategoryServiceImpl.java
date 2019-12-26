@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +31,7 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     @Override
     public CategoryDTO create(CategoryDTO categoryDTO) {
         checkInput(categoryDTO);
-        checkCategoryExists(categoryDTO);
+        checkCategoryUniqueness(categoryDTO);
 
         Category category = categoryMapper.toEntity(categoryDTO);
 
@@ -49,7 +50,7 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     @Override
     public CategoryDTO getById(long id) {
         Category category = categoryRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found"));
+                new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category is not found"));
         return categoryMapper.toDto(category);
     }
 
@@ -72,20 +73,15 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
         }
     }
 
-    private void checkCategoryExists(CategoryDTO categoryDTO) {
-        if (!UniqueCategoryNameValidator(categoryDTO)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category with this name is already exists");
+    private void checkCategoryUniqueness(@NotNull CategoryDTO categoryDTO) {
+        if (isCategoryExist(categoryDTO.getName())) {
+            String error = String.format("The category named %s already exists", categoryDTO.getName());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, error);
         }
     }
 
-    private boolean UniqueCategoryNameValidator(CategoryDTO categoryDTO) {
-        String categoryName = categoryDTO.getName();
-
-        for (CategoryDTO category : getCategories()) {
-            if (category.getName().equals(categoryName)) {
-                return false;
-            }
-        }
-        return true;
+    private boolean isCategoryExist(@NotNull String name) {
+        return categoryRepository.findByName(name).isPresent();
     }
+
 }

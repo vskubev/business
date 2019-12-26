@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +30,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
     @Override
     public UserDTO create(UserDTO userDTO) {
         checkInput(userDTO);
-        checkUserExists(userDTO);
+        checkUserUniqueness(userDTO);
 
         User user = userMapper.toEntity(userDTO);
 
@@ -48,7 +49,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
     @Override
     public UserDTO getById(long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not found"));
         return userMapper.toDto(user);
     }
 
@@ -89,32 +90,15 @@ public class UserServiceImpl implements CrudService<UserDTO> {
         }
     }
 
-    private void checkUserExists(UserDTO userDTO) {
-        if (!UniqueUsernameValidator(userDTO)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with this login is already exists");
-        }
-
-        if (!UniqueEmailValidator(userDTO)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with this email is already exists");
+    private void checkUserUniqueness(@NotNull UserDTO userDTO) {
+        if (isUserExist(userDTO.getLogin(), userDTO.getEmail())) {
+            String error = String.format("The user login %s or email %s already exists", userDTO.getLogin(), userDTO.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, error);
         }
     }
 
-    private boolean UniqueUsernameValidator(UserDTO userDTO) {
-        String login = userDTO.getLogin();
-
-        for (UserDTO user: getUsers()) {
-            if (user.getLogin().equals(login)) return false;
-        }
-        return true;
-    }
-
-    private boolean UniqueEmailValidator(UserDTO userDTO) {
-        String email = userDTO.getEmail();
-
-        for (UserDTO user: getUsers()) {
-            if (user.getEmail().equals(email)) return false;
-        }
-        return true;
+    private boolean isUserExist(@NotNull String login, String email) {
+        return (userRepository.findByLogin(login).isPresent() || userRepository.findByEmail(email).isPresent());
     }
 
 }

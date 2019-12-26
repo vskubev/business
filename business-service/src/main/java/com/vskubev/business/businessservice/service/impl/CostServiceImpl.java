@@ -1,6 +1,5 @@
 package com.vskubev.business.businessservice.service.impl;
 
-import com.vskubev.business.businessservice.map.CategoryDTO;
 import com.vskubev.business.businessservice.map.CostDTO;
 import com.vskubev.business.businessservice.map.CostMapper;
 import com.vskubev.business.businessservice.model.Cost;
@@ -50,7 +49,7 @@ public class CostServiceImpl implements CrudService<CostDTO> {
     @Override
     public CostDTO getById(long id) {
         Cost cost = costRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cost not found"));
+                new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cost is not found"));
         return costMapper.toDto(cost);
     }
 
