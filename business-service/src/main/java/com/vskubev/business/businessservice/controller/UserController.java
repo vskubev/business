@@ -2,6 +2,8 @@ package com.vskubev.business.businessservice.controller;
 
 import com.vskubev.business.businessservice.map.UserDTO;
 import com.vskubev.business.businessservice.service.impl.UserServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,8 @@ import java.util.List;
 public class UserController {
 
     private final UserServiceImpl userService;
+    private static final Logger logger = LoggerFactory.getLogger(
+            UserController.class);
 
     public UserController(UserServiceImpl userService) {
         this.userService = userService;
@@ -38,9 +42,13 @@ public class UserController {
 
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
     public ResponseEntity<UserDTO> getUser(@PathVariable("userId") long userId) {
+        logger.info("ty che pes");
+        logger.info("Request: /users/{}", userId);
+        UserDTO userDTO = userService.getById(userId);
+        logger.info("Response: {}", userDTO);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.getById(userId));
+                .body(userDTO);
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
