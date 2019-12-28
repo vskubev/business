@@ -15,10 +15,8 @@
 
             <!-- Храним файлы логов 10 дней -->
             <maxHistory>10</maxHistory>
-
             <!-- Максимальный размер файлов лога -->
             <totalSizeCap>100MB</totalSizeCap>
-
         </rollingPolicy>
         <encoder>
             <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} %highlight(%-5level) %logger{36}.%M - %msg%n</pattern>
