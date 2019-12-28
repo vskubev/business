@@ -1,5 +1,6 @@
 package com.vskubev.business.businessservice.controller;
 
+import com.google.gson.Gson;
 import com.vskubev.business.businessservice.map.UserDTO;
 import com.vskubev.business.businessservice.service.impl.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -16,16 +17,17 @@ import java.util.List;
 @RestController
 @Slf4j
 public class UserController {
-
+    private final Gson gson;
     private final UserServiceImpl userService;
 
-    public UserController(UserServiceImpl userService) {
+    public UserController(Gson gson, UserServiceImpl userService) {
+        this.gson = gson;
         this.userService = userService;
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
-        log.info("Request: Create user: {}", userDTO);
+        log.info("Request: Create user: {}", gson.toJson(userDTO));
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(userService.create(userDTO));
@@ -33,7 +35,7 @@ public class UserController {
 
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.PUT)
     public ResponseEntity<UserDTO> updateUser(@PathVariable ("userId") long userId, @Valid @RequestBody UserDTO userDTO) {
-        log.info("Request: Update user: {}", userDTO);
+        log.info("Request: Update user: {}", gson.toJson(userDTO));
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.updateById(userDTO));
