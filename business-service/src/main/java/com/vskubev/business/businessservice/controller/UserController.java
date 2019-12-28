@@ -31,6 +31,14 @@ public class UserController {
                 .body(userService.create(userDTO));
     }
 
+    @RequestMapping(value = "/users/{userId}", method = RequestMethod.PUT)
+    public ResponseEntity<UserDTO> updateUser(@PathVariable ("userId") long userId, @Valid @RequestBody UserDTO userDTO) {
+        log.info("Request: Update user: {}", userDTO);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userService.updateById(userDTO));
+    }
+
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteUser(@PathVariable("userId") long userId) {
         log.info("Request: DELETE /users/{}", userId);

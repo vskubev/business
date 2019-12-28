@@ -53,6 +53,11 @@ public class CostServiceImpl implements CrudService<CostDTO> {
         return costMapper.toDto(cost);
     }
 
+    @Override
+    public CostDTO updateById(CostDTO costDTO) {
+        return null;
+    }
+
     public List<CostDTO> getAllCosts() {
         return costRepository.findAll().stream()
                 .map(costMapper::toDto)

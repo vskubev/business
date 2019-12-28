@@ -38,7 +38,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
         user.setCreatedAt(localDateTime);
         user.setUpdatedAt(localDateTime);
 
-        return userMapper.toDto(userRepository.saveAndFlush(user));
+        return userMapper.toDto(userRepository.save(user));
     }
 
     @Override
@@ -51,6 +51,18 @@ public class UserServiceImpl implements CrudService<UserDTO> {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not found"));
         return userMapper.toDto(user);
+    }
+
+    @Override
+    public UserDTO updateById(UserDTO userDTO) {
+        checkInput(userDTO);
+        checkUserUniqueness(userDTO);
+
+        User user = userMapper.toEntity(userDTO);
+        LocalDateTime localDateTime = LocalDateTime.now();
+        user.setUpdatedAt(localDateTime);
+
+        return userMapper.toDto(userRepository.save(user));
     }
 
     public List<UserDTO> getUsers() {

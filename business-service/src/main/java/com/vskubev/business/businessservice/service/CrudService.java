@@ -10,4 +10,6 @@ public interface CrudService<T> {
     void deleteById(long id);
 
     T getById(long id);
+
+    T updateById(T entity);
 }

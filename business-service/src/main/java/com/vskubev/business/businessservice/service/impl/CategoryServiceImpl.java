@@ -54,6 +54,11 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
         return categoryMapper.toDto(category);
     }
 
+    @Override
+    public CategoryDTO updateById(CategoryDTO categoryDTO) {
+        return null;
+    }
+
     public List<CategoryDTO> getCategories() {
         return categoryRepository.findAll().stream()
                 .map(categoryMapper::toDto)
