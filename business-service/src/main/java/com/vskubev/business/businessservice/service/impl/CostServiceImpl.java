@@ -54,7 +54,7 @@ public class CostServiceImpl implements CrudService<CostDTO> {
     }
 
     @Override
-    public CostDTO updateById(CostDTO costDTO) {
+    public CostDTO update(long id, CostDTO costDTO) {
         return null;
     }
 

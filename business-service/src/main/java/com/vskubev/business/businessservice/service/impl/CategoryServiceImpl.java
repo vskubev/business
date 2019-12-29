@@ -55,7 +55,7 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     }
 
     @Override
-    public CategoryDTO updateById(CategoryDTO categoryDTO) {
+    public CategoryDTO update(long id, CategoryDTO categoryDTO) {
         return null;
     }
 

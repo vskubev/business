@@ -11,5 +11,5 @@ public interface CrudService<T> {
 
     T getById(long id);
 
-    T updateById(T entity);
+    T update(long id, T entity);
 }

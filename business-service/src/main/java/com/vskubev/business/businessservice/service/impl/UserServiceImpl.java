@@ -54,7 +54,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
     }
 
     @Override
-    public UserDTO updateById(UserDTO userDTO) {
+    public UserDTO update(long id, UserDTO userDTO) {
         checkInput(userDTO);
         checkUserUniqueness(userDTO);
 
