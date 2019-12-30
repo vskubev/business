@@ -125,7 +125,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
         }
 
         if (!(userDTO.getPassword() == null)
-                &&!userDTO.getPassword().matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$")) {
+                && !userDTO.getPassword().matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is incorrect. " +
                     "At least one upper case English letter, one lower case English letter, one digit, minimum eight in length");
         }

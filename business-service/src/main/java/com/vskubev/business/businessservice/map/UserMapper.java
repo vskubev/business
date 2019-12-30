@@ -13,6 +13,7 @@ public class UserMapper {
 
     /**
      * map to DTO object
+     *
      * @param entity
      * @return
      */
@@ -30,6 +31,7 @@ public class UserMapper {
 
     /**
      * map to Entity
+     *
      * @param userDTO
      * @return
      */

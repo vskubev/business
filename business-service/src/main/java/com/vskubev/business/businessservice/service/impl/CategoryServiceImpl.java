@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -39,7 +40,29 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
         category.setCreatedAt(localDateTime);
         category.setUpdatedAt(localDateTime);
 
-        return categoryMapper.toDto(categoryRepository.save(category));
+        return categoryMapper.toDTO(categoryRepository.save(category));
+    }
+
+    @Override
+    public CategoryDTO update(long id, CategoryDTO categoryDTO) {
+        checkInputWithoutNPE(categoryDTO);
+        checkCategoryUniqueness(categoryDTO);
+
+        Optional<Category> category = categoryRepository.findById(id);
+
+        if (category.isPresent()) {
+            if (new Long(categoryDTO.getOwnerId()) != null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Owner cannot be changed");
+            }
+            if (categoryDTO.getName() != null) {
+                category.get().setName(categoryDTO.getName());
+            }
+
+            category.get().setUpdatedAt(LocalDateTime.now());
+            return categoryMapper.toDTO(categoryRepository.save(category.get()));
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @Override
@@ -51,17 +74,12 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     public CategoryDTO getById(long id) {
         Category category = categoryRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category is not found"));
-        return categoryMapper.toDto(category);
-    }
-
-    @Override
-    public CategoryDTO update(long id, CategoryDTO categoryDTO) {
-        return null;
+        return categoryMapper.toDTO(category);
     }
 
     public List<CategoryDTO> getCategories() {
         return categoryRepository.findAll().stream()
-                .map(categoryMapper::toDto)
+                .map(categoryMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -73,6 +91,14 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
         if (categoryDTO.getName() == null
                 || categoryDTO.getName().isEmpty()
                 || !categoryDTO.getName().matches("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "The category name is incorrect. At least one upper case English letter.");
+        }
+    }
+
+    private void checkInputWithoutNPE(CategoryDTO categoryDTO) {
+        if (!(categoryDTO.getName() == null)
+                && !categoryDTO.getName().matches("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "The category name is incorrect. At least one upper case English letter.");
         }

@@ -42,7 +42,8 @@ public class UserDTO {
         return updatedAt;
     }
 
-    public UserDTO(long id, String login, String password, String name, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public UserDTO(long id, String login, String password, String name, String email,
+                   LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.login = login;
         this.password = password;

@@ -34,7 +34,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.PUT)
-    public ResponseEntity<UserDTO> updateUser(@PathVariable("userId") long userId, @Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> updateUser(@PathVariable("userId") long userId,
+                                              @Valid @RequestBody UserDTO userDTO) {
         log.info("Request: Update user: {}", gson.toJson(userDTO));
         return ResponseEntity
                 .status(HttpStatus.OK)

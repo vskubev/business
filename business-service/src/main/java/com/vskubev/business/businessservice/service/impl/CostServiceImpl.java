@@ -38,7 +38,7 @@ public class CostServiceImpl implements CrudService<CostDTO> {
         cost.setCreatedAt(localDateTime);
         cost.setUpdatedAt(localDateTime);
 
-        return costMapper.toDto(costRepository.save(cost));
+        return costMapper.toDTO(costRepository.save(cost));
     }
 
     @Override
@@ -50,7 +50,7 @@ public class CostServiceImpl implements CrudService<CostDTO> {
     public CostDTO getById(long id) {
         Cost cost = costRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cost is not found"));
-        return costMapper.toDto(cost);
+        return costMapper.toDTO(cost);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class CostServiceImpl implements CrudService<CostDTO> {
 
     public List<CostDTO> getAllCosts() {
         return costRepository.findAll().stream()
-                .map(costMapper::toDto)
+                .map(costMapper::toDTO)
                 .collect(Collectors.toList());
     }
 

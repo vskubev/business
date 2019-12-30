@@ -20,28 +20,38 @@ public class CategoryMapper {
         this.userRepository = userRepository;
     }
 
-    public CategoryDTO toDto(@NotNull Category entity) {
-        CategoryDTO categoryDTO = new CategoryDTO(
+    /**
+     * map to DTO object
+     *
+     * @param entity
+     * @return
+     */
+    public CategoryDTO toDTO(@NotNull Category entity) {
+        return new CategoryDTO(
                 entity.getId(),
                 entity.getName(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt(),
                 entity.getOwner().getId()
         );
-        return categoryDTO;
     }
 
+    /**
+     * map to Entity
+     *
+     * @param categoryDTO
+     * @return
+     */
     public Category toEntity(@NotNull CategoryDTO categoryDTO) {
         User owner = userRepository.findById(categoryDTO.getOwnerId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not found"));
 
-        Category category = new Category(
+        return new Category(
                 categoryDTO.getName(),
                 categoryDTO.getCreatedAt(),
                 categoryDTO.getUpdatedAt(),
                 owner
         );
-        return category;
     }
 
 }

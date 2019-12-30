@@ -1,5 +1,6 @@
 package com.vskubev.business.businessservice.controller;
 
+import com.google.gson.Gson;
 import com.vskubev.business.businessservice.map.CategoryDTO;
 import com.vskubev.business.businessservice.service.impl.CategoryServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +17,11 @@ import java.util.List;
 @RestController
 @Slf4j
 public class CategoryController {
-
+    private final Gson gson;
     private final CategoryServiceImpl categoryService;
 
-    public CategoryController(CategoryServiceImpl categoryService) {
+    public CategoryController(Gson gson, CategoryServiceImpl categoryService) {
+        this.gson = gson;
         this.categoryService = categoryService;
     }
 
@@ -28,6 +30,15 @@ public class CategoryController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(categoryService.create(categoryDTO));
+    }
+
+    @RequestMapping(value = "/categories/{categoryId}", method = RequestMethod.PUT)
+    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable("categoryId") long categoryId,
+                                                      @Valid @RequestBody CategoryDTO categoryDTO) {
+        log.info("Request: Update category: {}", gson.toJson(categoryDTO));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(categoryService.update(categoryId, categoryDTO));
     }
 
     @RequestMapping(value = "/categories/{categoryId}", method = RequestMethod.DELETE)

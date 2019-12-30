@@ -25,7 +25,7 @@ public class CostMapper {
         this.categoryRepository = categoryRepository;
     }
 
-    public CostDTO toDto(@NotNull Cost entity) {
+    public CostDTO toDTO(@NotNull Cost entity) {
         CostDTO costDTO = new CostDTO(
                 entity.getId(),
                 entity.getCreatedAt(),
