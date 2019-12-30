@@ -11,8 +11,13 @@ import javax.validation.constraints.NotNull;
 @Component
 public class UserMapper {
 
-    public UserDTO toDto(@NotNull User entity) {
-        UserDTO userDTO = new UserDTO(
+    /**
+     * map to DTO object
+     * @param entity
+     * @return
+     */
+    public UserDTO toDTO(@NotNull User entity) {
+        return new UserDTO(
                 entity.getId(),
                 entity.getLogin(),
                 "",
@@ -21,11 +26,15 @@ public class UserMapper {
                 entity.getCreatedAt(),
                 entity.getUpdatedAt()
         );
-        return userDTO;
     }
 
+    /**
+     * map to Entity
+     * @param userDTO
+     * @return
+     */
     public User toEntity(@NotNull UserDTO userDTO) {
-        User user = new User(
+        return new User(
                 userDTO.getLogin(),
                 userDTO.getPassword(),
                 userDTO.getName(),
@@ -33,7 +42,6 @@ public class UserMapper {
                 userDTO.getCreatedAt(),
                 userDTO.getUpdatedAt()
         );
-        return user;
     }
 
 }
