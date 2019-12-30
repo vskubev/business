@@ -26,7 +26,7 @@ public class CostMapper {
     }
 
     public CostDTO toDTO(@NotNull Cost entity) {
-        CostDTO costDTO = new CostDTO(
+        return new CostDTO(
                 entity.getId(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt(),
@@ -34,7 +34,6 @@ public class CostMapper {
                 entity.getCategory().getId(),
                 entity.getOwner().getId()
         );
-        return costDTO;
     }
 
     public Cost toEntity(@NotNull CostDTO costDTO) {
@@ -43,13 +42,12 @@ public class CostMapper {
         Category category = categoryRepository.findById(costDTO.getCategoryId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found"));
 
-        Cost cost = new Cost(
+        return new Cost(
                 costDTO.getCreatedAt(),
                 costDTO.getUpdatedAt(),
                 costDTO.getPrice(),
                 category,
                 owner
         );
-        return cost;
     }
 }

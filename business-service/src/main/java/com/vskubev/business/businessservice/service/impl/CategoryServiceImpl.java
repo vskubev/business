@@ -51,7 +51,7 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
         Optional<Category> category = categoryRepository.findById(id);
 
         if (category.isPresent()) {
-            if (new Long(categoryDTO.getOwnerId()) != null) {
+            if (categoryDTO.getOwnerId() != 0) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Owner cannot be changed");
             }
             if (categoryDTO.getName() != null) {
@@ -93,6 +93,10 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
                 || !categoryDTO.getName().matches("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "The category name is incorrect. At least one upper case English letter.");
+        }
+        if (categoryDTO.getOwnerId() == 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Required ownerId field is empty");
         }
     }
 

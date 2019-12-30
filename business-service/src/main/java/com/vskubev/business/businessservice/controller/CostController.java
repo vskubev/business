@@ -1,7 +1,9 @@
 package com.vskubev.business.businessservice.controller;
 
+import com.google.gson.Gson;
 import com.vskubev.business.businessservice.map.CostDTO;
 import com.vskubev.business.businessservice.service.impl.CostServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +15,13 @@ import java.util.List;
  * @author skubev
  */
 @RestController
+@Slf4j
 public class CostController {
-
+    private final Gson gson;
     private final CostServiceImpl costService;
 
-    public CostController(CostServiceImpl costService) {
+    public CostController(Gson gson, CostServiceImpl costService) {
+        this.gson = gson;
         this.costService = costService;
     }
 
@@ -28,8 +32,18 @@ public class CostController {
                 .body(costService.create(costDTO));
     }
 
+    @RequestMapping(value = "/costs/{costId}", method = RequestMethod.PUT)
+    public ResponseEntity<CostDTO> updateCost(@PathVariable("costId") long costId,
+                                              @Valid @RequestBody CostDTO costDTO) {
+        log.info("Request: Update cost: {}", gson.toJson(costDTO));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(costService.update(costId, costDTO));
+    }
+
+
     @RequestMapping(value = "/costs/{costId}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteUser(@PathVariable("costId") long costId) {
+    public ResponseEntity<?> deleteCost(@PathVariable("costId") long costId) {
         costService.deleteById(costId);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
