@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
-    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> create(@Valid @RequestBody UserDTO userDTO) {
         log.info("Request: Create user: {}", gson.toJson(userDTO));
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -34,8 +34,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.PUT)
-    public ResponseEntity<UserDTO> updateUser(@PathVariable("userId") long userId,
-                                              @Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> update(@PathVariable("userId") long userId,
+                                          @Valid @RequestBody UserDTO userDTO) {
         log.info("Request: Update user: {}", gson.toJson(userDTO));
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -43,9 +43,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteUser(@PathVariable("userId") long userId) {
+    public ResponseEntity<?> delete(@PathVariable("userId") long userId) {
         log.info("Request: DELETE /users/{}", userId);
-
         userService.deleteById(userId);
         log.info("Success");
         return ResponseEntity
@@ -64,7 +63,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public ResponseEntity<List<UserDTO>> getUsers() {
+    public ResponseEntity<List<UserDTO>> getAll() {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.getUsers());

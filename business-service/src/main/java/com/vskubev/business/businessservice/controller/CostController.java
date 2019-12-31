@@ -26,14 +26,14 @@ public class CostController {
     }
 
     @RequestMapping(value = "/costs", method = RequestMethod.POST)
-    public ResponseEntity<CostDTO> createCost(@Valid @RequestBody CostDTO costDTO) {
+    public ResponseEntity<CostDTO> create(@Valid @RequestBody CostDTO costDTO) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(costService.create(costDTO));
     }
 
     @RequestMapping(value = "/costs/{costId}", method = RequestMethod.PUT)
-    public ResponseEntity<CostDTO> updateCost(@PathVariable("costId") long costId,
+    public ResponseEntity<CostDTO> update(@PathVariable("costId") long costId,
                                               @Valid @RequestBody CostDTO costDTO) {
         log.info("Request: Update cost: {}", gson.toJson(costDTO));
         return ResponseEntity
@@ -43,7 +43,7 @@ public class CostController {
 
 
     @RequestMapping(value = "/costs/{costId}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteCost(@PathVariable("costId") long costId) {
+    public ResponseEntity<?> delete(@PathVariable("costId") long costId) {
         costService.deleteById(costId);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
@@ -51,14 +51,14 @@ public class CostController {
     }
 
     @RequestMapping(value = "/costs/{costId}", method = RequestMethod.GET)
-    public ResponseEntity<CostDTO> getCost(@PathVariable("costId") long costId) {
+    public ResponseEntity<CostDTO> getById(@PathVariable("costId") long costId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(costService.getById(costId));
     }
 
     @RequestMapping(value = "/costs", method = RequestMethod.GET)
-    public ResponseEntity<List<CostDTO>> getAllCosts() {
+    public ResponseEntity<List<CostDTO>> getAll() {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(costService.getAllCosts());
