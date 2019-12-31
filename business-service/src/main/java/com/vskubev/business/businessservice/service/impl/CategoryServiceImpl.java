@@ -67,6 +67,8 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
 
     @Override
     public void deleteById(long id) {
+        categoryRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NO_CONTENT));
         categoryRepository.deleteById(id);
     }
 
@@ -118,5 +120,12 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     private boolean isCategoryExist(@NotNull String name) {
         return categoryRepository.findByName(name).isPresent();
     }
+
+//    private void checkAvailabilityCost(@NotNull long categoryId) {
+//        if (costRepository.findByCategory(categoryMapper.toEntity(getById(categoryId))).isPresent()) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+//                    "If costs are tied to a category, the category cannot be deleted.");
+//        }
+//    }
 
 }

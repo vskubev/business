@@ -71,6 +71,8 @@ public class UserServiceImpl implements CrudService<UserDTO> {
 
     @Override
     public void deleteById(long id) {
+        userRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NO_CONTENT));
         userRepository.deleteById(id);
     }
 

@@ -70,6 +70,8 @@ public class CostServiceImpl implements CrudService<CostDTO> {
 
     @Override
     public void deleteById(long id) {
+        costRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NO_CONTENT));
         costRepository.deleteById(id);
     }
 
