@@ -5,6 +5,7 @@ import com.vskubev.business.businessservice.map.UserMapper;
 import com.vskubev.business.businessservice.model.User;
 import com.vskubev.business.businessservice.repository.UserRepository;
 import com.vskubev.business.businessservice.service.CrudService;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,22 +74,21 @@ public class UserServiceImpl implements CrudService<UserDTO> {
     }
 
     @Override
-    @Transactional
     public void deleteById(long id) {
-        userRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NO_CONTENT));
-        userRepository.deleteById(id);
+        try {
+            userRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            //Because controller method always return 204 http status, include if empty is not found
+        }
     }
 
     @Override
-    @Transactional
     public UserDTO getById(long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not found"));
         return userMapper.toDTO(user);
     }
 
-    @Transactional
     public List<UserDTO> getUsers() {
         return userRepository.findAll().stream()
                 .map(userMapper::toDTO)

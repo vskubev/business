@@ -7,6 +7,7 @@ import com.vskubev.business.businessservice.model.Category;
 import com.vskubev.business.businessservice.model.Cost;
 import com.vskubev.business.businessservice.repository.CostRepository;
 import com.vskubev.business.businessservice.service.CrudService;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,22 +73,21 @@ public class CostServiceImpl implements CrudService<CostDTO> {
     }
 
     @Override
-    @Transactional
     public void deleteById(long id) {
-        costRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NO_CONTENT));
-        costRepository.deleteById(id);
+        try {
+            costRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            //Because controller method always return 204 http status, include if empty is not found
+        }
     }
 
     @Override
-    @Transactional
     public CostDTO getById(long id) {
         Cost cost = costRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cost is not found"));
         return costMapper.toDTO(cost);
     }
 
-    @Transactional
     public List<CostDTO> getAllCosts() {
         return costRepository.findAll().stream()
                 .map(costMapper::toDTO)

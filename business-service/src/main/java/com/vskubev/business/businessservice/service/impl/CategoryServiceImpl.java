@@ -5,6 +5,7 @@ import com.vskubev.business.businessservice.map.CategoryMapper;
 import com.vskubev.business.businessservice.model.Category;
 import com.vskubev.business.businessservice.repository.CategoryRepository;
 import com.vskubev.business.businessservice.service.CrudService;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,22 +70,21 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     }
 
     @Override
-    @Transactional
     public void deleteById(long id) {
-        categoryRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NO_CONTENT));
-        categoryRepository.deleteById(id);
+        try {
+            categoryRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            //Because controller method always return 204 http status, include if empty is not found
+        }
     }
 
     @Override
-    @Transactional
     public CategoryDTO getById(long id) {
         Category category = categoryRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category is not found"));
         return categoryMapper.toDTO(category);
     }
 
-    @Transactional
     public List<CategoryDTO> getCategories() {
         return categoryRepository.findAll().stream()
                 .map(categoryMapper::toDTO)
