@@ -9,6 +9,7 @@ import com.vskubev.business.businessservice.repository.CostRepository;
 import com.vskubev.business.businessservice.service.CrudService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -36,6 +37,7 @@ public class CostServiceImpl implements CrudService<CostDTO> {
     }
 
     @Override
+    @Transactional
     public CostDTO create(CostDTO costDTO) {
         checkInput(costDTO);
 
@@ -50,6 +52,7 @@ public class CostServiceImpl implements CrudService<CostDTO> {
     }
 
     @Override
+    @Transactional
     public CostDTO update(long id, CostDTO costDTO) {
         Optional<Cost> cost = costRepository.findById(id);
 
@@ -69,6 +72,7 @@ public class CostServiceImpl implements CrudService<CostDTO> {
     }
 
     @Override
+    @Transactional
     public void deleteById(long id) {
         costRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NO_CONTENT));
@@ -76,12 +80,14 @@ public class CostServiceImpl implements CrudService<CostDTO> {
     }
 
     @Override
+    @Transactional
     public CostDTO getById(long id) {
         Cost cost = costRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cost is not found"));
         return costMapper.toDTO(cost);
     }
 
+    @Transactional
     public List<CostDTO> getAllCosts() {
         return costRepository.findAll().stream()
                 .map(costMapper::toDTO)

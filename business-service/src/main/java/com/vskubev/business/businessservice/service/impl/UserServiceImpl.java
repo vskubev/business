@@ -7,6 +7,7 @@ import com.vskubev.business.businessservice.repository.UserRepository;
 import com.vskubev.business.businessservice.service.CrudService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotNull;
@@ -29,6 +30,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
     }
 
     @Override
+    @Transactional
     public UserDTO create(UserDTO userDTO) {
         checkInput(userDTO);
         checkUserUniqueness(userDTO);
@@ -43,6 +45,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
     }
 
     @Override
+    @Transactional
     public UserDTO update(long id, UserDTO userDTO) {
         checkInputWithoutNPE(userDTO);
         checkUserUniqueness(userDTO);
@@ -70,6 +73,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
     }
 
     @Override
+    @Transactional
     public void deleteById(long id) {
         userRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NO_CONTENT));
@@ -77,12 +81,14 @@ public class UserServiceImpl implements CrudService<UserDTO> {
     }
 
     @Override
+    @Transactional
     public UserDTO getById(long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not found"));
         return userMapper.toDTO(user);
     }
 
+    @Transactional
     public List<UserDTO> getUsers() {
         return userRepository.findAll().stream()
                 .map(userMapper::toDTO)
@@ -104,7 +110,8 @@ public class UserServiceImpl implements CrudService<UserDTO> {
                 || userDTO.getPassword().isEmpty()
                 || !userDTO.getPassword().matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is incorrect. " +
-                    "At least one upper case English letter, one lower case English letter, one digit, minimum eight in length");
+                    "At least one upper case English letter, one lower case English letter, " +
+                    "one digit, minimum eight in length");
         }
 
         if (userDTO.getName() == null
@@ -129,7 +136,8 @@ public class UserServiceImpl implements CrudService<UserDTO> {
         if (!(userDTO.getPassword() == null)
                 && !userDTO.getPassword().matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is incorrect. " +
-                    "At least one upper case English letter, one lower case English letter, one digit, minimum eight in length");
+                    "At least one upper case English letter, one lower case English letter, one digit, " +
+                    "minimum eight in length");
         }
 
         if (!(userDTO.getName() == null)

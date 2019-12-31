@@ -7,6 +7,7 @@ import com.vskubev.business.businessservice.repository.CategoryRepository;
 import com.vskubev.business.businessservice.service.CrudService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotNull;
@@ -30,6 +31,7 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     }
 
     @Override
+    @Transactional
     public CategoryDTO create(CategoryDTO categoryDTO) {
         checkInput(categoryDTO);
         checkCategoryUniqueness(categoryDTO);
@@ -44,6 +46,7 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     }
 
     @Override
+    @Transactional
     public CategoryDTO update(long id, CategoryDTO categoryDTO) {
         checkInputWithoutNPE(categoryDTO);
         checkCategoryUniqueness(categoryDTO);
@@ -66,6 +69,7 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     }
 
     @Override
+    @Transactional
     public void deleteById(long id) {
         categoryRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NO_CONTENT));
@@ -73,12 +77,14 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     }
 
     @Override
+    @Transactional
     public CategoryDTO getById(long id) {
         Category category = categoryRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category is not found"));
         return categoryMapper.toDTO(category);
     }
 
+    @Transactional
     public List<CategoryDTO> getCategories() {
         return categoryRepository.findAll().stream()
                 .map(categoryMapper::toDTO)
