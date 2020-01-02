@@ -34,8 +34,7 @@ public class CategoryController {
 
     @RequestMapping(value = "/categories/{categoryId}", method = RequestMethod.PUT)
     public ResponseEntity<CategoryDTO> update(@PathVariable("categoryId") long categoryId,
-                                                      @Valid @RequestBody CategoryDTO categoryDTO) {
-        log.info("Request: Update category: {}", gson.toJson(categoryDTO));
+                                              @Valid @RequestBody CategoryDTO categoryDTO) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(categoryService.update(categoryId, categoryDTO));

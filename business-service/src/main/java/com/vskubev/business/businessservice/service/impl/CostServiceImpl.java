@@ -7,10 +7,10 @@ import com.vskubev.business.businessservice.model.Category;
 import com.vskubev.business.businessservice.model.Cost;
 import com.vskubev.business.businessservice.repository.CostRepository;
 import com.vskubev.business.businessservice.service.CrudService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
  * @author skubev
  */
 @Service
+@Slf4j
 public class CostServiceImpl implements CrudService<CostDTO> {
 
     private final CostRepository costRepository;
@@ -38,7 +39,6 @@ public class CostServiceImpl implements CrudService<CostDTO> {
     }
 
     @Override
-    @Transactional
     public CostDTO create(CostDTO costDTO) {
         checkInput(costDTO);
 
@@ -53,7 +53,6 @@ public class CostServiceImpl implements CrudService<CostDTO> {
     }
 
     @Override
-    @Transactional
     public CostDTO update(long id, CostDTO costDTO) {
         Optional<Cost> cost = costRepository.findById(id);
 
@@ -77,6 +76,7 @@ public class CostServiceImpl implements CrudService<CostDTO> {
         try {
             costRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
+            log.info("Cost not found");
             //Because controller method always return 204 http status, include if empty is not found
         }
     }

@@ -5,10 +5,10 @@ import com.vskubev.business.businessservice.map.CategoryMapper;
 import com.vskubev.business.businessservice.model.Category;
 import com.vskubev.business.businessservice.repository.CategoryRepository;
 import com.vskubev.business.businessservice.service.CrudService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotNull;
@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
  * @author skubev
  */
 @Service
+@Slf4j
 public class CategoryServiceImpl implements CrudService<CategoryDTO> {
 
     private final CategoryRepository categoryRepository;
@@ -32,7 +33,6 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     }
 
     @Override
-    @Transactional
     public CategoryDTO create(CategoryDTO categoryDTO) {
         checkInput(categoryDTO);
         checkCategoryUniqueness(categoryDTO);
@@ -47,7 +47,6 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     }
 
     @Override
-    @Transactional
     public CategoryDTO update(long id, CategoryDTO categoryDTO) {
         checkInputWithoutNPE(categoryDTO);
         checkCategoryUniqueness(categoryDTO);
@@ -74,6 +73,7 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
         try {
             categoryRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
+            log.info("Category not found");
             //Because controller method always return 204 http status, include if empty is not found
         }
     }

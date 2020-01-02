@@ -34,8 +34,7 @@ public class CostController {
 
     @RequestMapping(value = "/costs/{costId}", method = RequestMethod.PUT)
     public ResponseEntity<CostDTO> update(@PathVariable("costId") long costId,
-                                              @Valid @RequestBody CostDTO costDTO) {
-        log.info("Request: Update cost: {}", gson.toJson(costDTO));
+                                          @Valid @RequestBody CostDTO costDTO) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(costService.update(costId, costDTO));

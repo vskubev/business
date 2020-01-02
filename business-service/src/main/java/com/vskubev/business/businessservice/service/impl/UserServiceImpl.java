@@ -5,10 +5,10 @@ import com.vskubev.business.businessservice.map.UserMapper;
 import com.vskubev.business.businessservice.model.User;
 import com.vskubev.business.businessservice.repository.UserRepository;
 import com.vskubev.business.businessservice.service.CrudService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotNull;
@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
  * @author skubev
  */
 @Service
+@Slf4j
 public class UserServiceImpl implements CrudService<UserDTO> {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -31,7 +32,6 @@ public class UserServiceImpl implements CrudService<UserDTO> {
     }
 
     @Override
-    @Transactional
     public UserDTO create(UserDTO userDTO) {
         checkInput(userDTO);
         checkUserUniqueness(userDTO);
@@ -46,7 +46,6 @@ public class UserServiceImpl implements CrudService<UserDTO> {
     }
 
     @Override
-    @Transactional
     public UserDTO update(long id, UserDTO userDTO) {
         checkInputWithoutNPE(userDTO);
         checkUserUniqueness(userDTO);
@@ -78,6 +77,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
         try {
             userRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
+            log.info("User is not found");
             //Because controller method always return 204 http status, include if empty is not found
         }
     }
