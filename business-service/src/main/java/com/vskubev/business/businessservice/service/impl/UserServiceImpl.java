@@ -77,8 +77,8 @@ public class UserServiceImpl implements CrudService<UserDTO> {
         try {
             userRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            log.info("User is not found");
-            //Because controller method always return 204 http status, include if empty is not found
+            log.debug("User is not found");
+            //Because controller method always return 204 http status, include if entity is not found
         }
     }
 

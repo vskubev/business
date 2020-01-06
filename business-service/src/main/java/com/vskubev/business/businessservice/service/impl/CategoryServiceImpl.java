@@ -73,8 +73,8 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
         try {
             categoryRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            log.info("Category not found");
-            //Because controller method always return 204 http status, include if empty is not found
+            log.debug("Category not found");
+            //Because controller method always return 204 http status, include if entity is not found
         }
     }
 
@@ -126,12 +126,5 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     private boolean isCategoryExist(@NotNull String name) {
         return categoryRepository.findByName(name).isPresent();
     }
-
-//    private void checkAvailabilityCost(@NotNull long categoryId) {
-//        if (costRepository.findByCategory(categoryMapper.toEntity(getById(categoryId))).isPresent()) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-//                    "If costs are tied to a category, the category cannot be deleted.");
-//        }
-//    }
 
 }

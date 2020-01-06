@@ -23,3 +23,9 @@ databaseChangeLog:
 - include:
       file: changelog/db.migration8.yaml
       relativeToChangelogFile: false
+- include:
+    file: changelog/db.migration9.yaml
+    relativeToChangelogFile: false
+- include:
+    file: changelog/db.migration10.yaml
+    relativeToChangelogFile: false
