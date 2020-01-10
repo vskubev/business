@@ -51,7 +51,7 @@ public class Cost {
     /**
      * owner
      */
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "owner_id", nullable = false, unique = false)
     private User owner;
 
