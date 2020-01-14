@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: modifyDataTypePrice
+      author: Skubyev
+      changes:
+       - modifyDataType:
+          catalogName: business
+          columnName: price
+          newDataType: money
+          tableName: costs
