@@ -1,8 +1,0 @@
-databaseChangeLog:
-  - changeSet:
-      id: drop_foreging_key_from_users_to_costs
-      author: Skubyev
-      changes:
-        - dropForeignKeyConstraint:
-            baseTableName: costs
-            constraintName: fk_costs_users_id
