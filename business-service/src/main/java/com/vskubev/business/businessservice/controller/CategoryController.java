@@ -1,6 +1,5 @@
 package com.vskubev.business.businessservice.controller;
 
-import com.google.gson.Gson;
 import com.vskubev.business.businessservice.map.CategoryDTO;
 import com.vskubev.business.businessservice.service.impl.CategoryServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -17,11 +16,9 @@ import java.util.List;
 @RestController
 @Slf4j
 public class CategoryController {
-    private final Gson gson;
     private final CategoryServiceImpl categoryService;
 
-    public CategoryController(Gson gson, CategoryServiceImpl categoryService) {
-        this.gson = gson;
+    public CategoryController(CategoryServiceImpl categoryService) {
         this.categoryService = categoryService;
     }
 

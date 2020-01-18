@@ -117,7 +117,12 @@ public class User {
     public User() {
     }
 
-    public User(String login, String hashPassword, String name, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public User(String login,
+                String hashPassword,
+                String name,
+                String email,
+                LocalDateTime createdAt,
+                LocalDateTime updatedAt) {
         this.login = login;
         this.hashPassword = hashPassword;
         this.name = name;

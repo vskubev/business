@@ -89,7 +89,10 @@ public class Category {
     public Category() {
     }
 
-    public Category(String name, LocalDateTime createdAt, LocalDateTime updatedAt, long ownerId) {
+    public Category(String name,
+                    LocalDateTime createdAt,
+                    LocalDateTime updatedAt,
+                    long ownerId) {
         this.name = name;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;

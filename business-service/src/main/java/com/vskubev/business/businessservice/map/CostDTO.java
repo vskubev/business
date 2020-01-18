@@ -39,8 +39,12 @@ public class CostDTO {
         return ownerId;
     }
 
-    public CostDTO(long id, LocalDateTime createdAt, LocalDateTime updatedAt, BigDecimal price,
-                   long categoryId, long ownerId) {
+    public CostDTO(long id,
+                   LocalDateTime createdAt,
+                   LocalDateTime updatedAt,
+                   BigDecimal price,
+                   long categoryId,
+                   long ownerId) {
         this.id = id;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;

@@ -22,7 +22,9 @@ public class UserServiceClient {
     private final Gson gson;
     private final ApiConfig apiConfig;
 
-    public UserServiceClient(HttpClient httpClient, Gson gson, ApiConfig apiConfig) {
+    public UserServiceClient(HttpClient httpClient,
+                             Gson gson,
+                             ApiConfig apiConfig) {
         this.httpClient = httpClient;
         this.gson = gson;
         this.apiConfig = apiConfig;
@@ -31,6 +33,7 @@ public class UserServiceClient {
     public Optional<UserDTO> getUserById(final long userId) {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
+                .header("Authorization", "token")
                 .uri(URI.create(apiConfig.getAuthServiceUrl() + "/users/" + userId))
                 .build();
 
@@ -41,7 +44,7 @@ public class UserServiceClient {
         /**
          * Пулл коннектов переполнен или сервис недоступен
          */
-        catch (IOException | InterruptedException e) {
+            catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return Optional.empty();
         }

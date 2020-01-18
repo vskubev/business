@@ -8,6 +8,11 @@ import com.vskubev.business.authservice.service.CrudService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -25,10 +30,13 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements CrudService<UserDTO> {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final SecurityServiceImpl securityService;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository,
+                           UserMapper userMapper, SecurityServiceImpl securityService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.securityService = securityService;
     }
 
     @Override
@@ -37,6 +45,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
         checkUserUniqueness(userDTO);
 
         User user = userMapper.toEntity(userDTO);
+        user.setHashPassword(new BCryptPasswordEncoder().encode(user.getHashPassword()));
 
         LocalDateTime localDateTime = LocalDateTime.now();
         user.setCreatedAt(localDateTime);
@@ -83,16 +92,31 @@ public class UserServiceImpl implements CrudService<UserDTO> {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public UserDTO getById(long id) {
+        User currentUser = securityService.getCurrentUser();
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not found"));
-        return userMapper.toDTO(user);
+        if (currentUser.getId() == user.getId()) {
+            return userMapper.toDTO(user);
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
     }
 
     public List<UserDTO> getUsers() {
         return userRepository.findAll().stream()
                 .map(userMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public UserDTO getCurrentUserOr403() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            throw new AccessDeniedException("Access denied");
+        }
+        return userMapper.toDTO(userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new AccessDeniedException("Access denied")));
     }
 
     private void checkInput(UserDTO userDTO) {

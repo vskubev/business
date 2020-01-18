@@ -77,7 +77,7 @@ public class CostServiceImpl implements CrudService<CostDTO> {
             cost.get().setUpdatedAt(LocalDateTime.now());
             return costMapper.toDTO(costRepository.save(cost.get()));
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cost not found");
         }
     }
 

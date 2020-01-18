@@ -60,4 +60,10 @@ public class UserController {
                 .body(userService.getUsers());
     }
 
+    @RequestMapping(value = "/users/current", method = RequestMethod.GET)
+    public ResponseEntity<UserDTO> getCurrentUser() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userService.getCurrentUserOr403());
+    }
 }

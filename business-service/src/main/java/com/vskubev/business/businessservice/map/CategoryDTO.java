@@ -33,7 +33,11 @@ public class CategoryDTO {
         return ownerId;
     }
 
-    public CategoryDTO(long id, String name, LocalDateTime createdAt, LocalDateTime updatedAt, long ownerId) {
+    public CategoryDTO(long id,
+                       String name,
+                       LocalDateTime createdAt,
+                       LocalDateTime updatedAt,
+                       long ownerId) {
         this.id = id;
         this.name = name;
         this.createdAt = createdAt;

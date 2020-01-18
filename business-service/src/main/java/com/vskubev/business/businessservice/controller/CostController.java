@@ -1,6 +1,5 @@
 package com.vskubev.business.businessservice.controller;
 
-import com.google.gson.Gson;
 import com.vskubev.business.businessservice.map.CostDTO;
 import com.vskubev.business.businessservice.service.impl.CostServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -17,11 +16,9 @@ import java.util.List;
 @RestController
 @Slf4j
 public class CostController {
-    private final Gson gson;
     private final CostServiceImpl costService;
 
-    public CostController(Gson gson, CostServiceImpl costService) {
-        this.gson = gson;
+    public CostController(CostServiceImpl costService) {
         this.costService = costService;
     }
 

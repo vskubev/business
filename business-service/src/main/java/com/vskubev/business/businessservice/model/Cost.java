@@ -105,7 +105,11 @@ public class Cost {
     public Cost() {
     }
 
-    public Cost(LocalDateTime createdAt, LocalDateTime updatedAt, BigDecimal price, Category category, long ownerId) {
+    public Cost(LocalDateTime createdAt,
+                LocalDateTime updatedAt,
+                BigDecimal price,
+                Category category,
+                long ownerId) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.price = price;
