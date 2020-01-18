@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_foreging_key_from_users_to_categories
+      author: Skubyev
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: owner_id #name foreign key column
+            baseTableName: categories #create foreign key in this table
+            constraintName: fk_categories_users_id
+            onDelete: SET NULL
+            onUpdate: CASCADE
+            referencedColumnNames: id #foreign key column
+            referencedTableName: users #foreign key from this table

@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_index_for_table_categories_column_name
+      author: Skubyev
+      changes:
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: name
+            indexName: idx_name
+            schemaName: public
+            tableName: categories
+            unique: true

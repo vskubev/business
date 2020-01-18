@@ -1,0 +1,43 @@
+databaseChangeLog:
+- include:
+    file: changelog/db.migration1.yaml
+    relativeToChangelogFile: false
+- include:
+    file: changelog/db.migration2.yaml
+    relativeToChangelogFile: false
+- include:
+    file: changelog/db.migration3.yaml
+    relativeToChangelogFile: false
+- include:
+    file: changelog/db.migration4.yaml
+    relativeToChangelogFile: false
+- include:
+    file: changelog/db.migration5.yaml
+    relativeToChangelogFile: false
+- include:
+    file: changelog/db.migration6.yaml
+    relativeToChangelogFile: false
+- include:
+      file: changelog/db.migration7.yaml
+      relativeToChangelogFile: false
+- include:
+      file: changelog/db.migration8.yaml
+      relativeToChangelogFile: false
+- include:
+    file: changelog/db.migration9.yaml
+    relativeToChangelogFile: false
+- include:
+    file: changelog/db.migration10.yaml
+    relativeToChangelogFile: false
+- include:
+    file: changelog/db.migration11.yaml
+    relativeToChangelogFile: false
+- include:
+    file: changelog/db.migration12.yaml
+    relativeToChangelogFile: false
+- include:
+    file: changelog/db.migration13.yaml
+    relativeToChangelogFile: false
+- include:
+    file: changelog/db.migration14.yaml
+    relativeToChangelogFile: false
