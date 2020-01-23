@@ -57,7 +57,7 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
 
     @Override
     public CategoryDTO update(long id, CategoryDTO categoryDTO) {
-        checkInputWithoutNPE(categoryDTO);
+        checkInputForUpdate(categoryDTO);
         checkCategoryUniqueness(categoryDTO);
 
         Optional<Category> category = categoryRepository.findById(id);
@@ -117,7 +117,7 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
         }
     }
 
-    private void checkInputWithoutNPE(CategoryDTO categoryDTO) {
+    private void checkInputForUpdate(CategoryDTO categoryDTO) {
         if (!(categoryDTO.getName() == null)
                 && !categoryDTO.getName().matches("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,

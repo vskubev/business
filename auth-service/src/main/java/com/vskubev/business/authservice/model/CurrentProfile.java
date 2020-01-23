@@ -10,11 +10,11 @@ import java.util.Collections;
 /**
  * @author skubev
  */
-public class UserAwareUserDetails implements UserDetails {
+public class CurrentProfile implements UserDetails {
 
     private final User user;
 
-    public UserAwareUserDetails(User user) {
+    public CurrentProfile(User user) {
         this.user = user;
     }
 

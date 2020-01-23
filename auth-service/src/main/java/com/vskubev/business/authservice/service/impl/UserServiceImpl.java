@@ -55,8 +55,9 @@ public class UserServiceImpl implements CrudService<UserDTO> {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public UserDTO update(long id, UserDTO userDTO) {
-        checkInputWithoutNPE(userDTO);
+        checkInputForUpdate(userDTO);
         checkUserUniqueness(userDTO);
 
         Optional<User> user = userRepository.findById(id);
@@ -66,7 +67,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
                 user.get().setLogin(userDTO.getLogin());
             }
             if (userDTO.getPassword() != null) {
-                user.get().setHashPassword(userDTO.getPassword());
+                user.get().setHashPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
             }
             if (userDTO.getName() != null) {
                 user.get().setName(userDTO.getName());
@@ -82,6 +83,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public void deleteById(long id) {
         try {
             userRepository.deleteById(id);
@@ -110,7 +112,8 @@ public class UserServiceImpl implements CrudService<UserDTO> {
                 .collect(Collectors.toList());
     }
 
-    public UserDTO getCurrentUserOr403() {
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
+    public UserDTO getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             throw new AccessDeniedException("Access denied");
@@ -151,7 +154,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
         }
     }
 
-    private void checkInputWithoutNPE(UserDTO userDTO) {
+    private void checkInputForUpdate(UserDTO userDTO) {
         if (!(userDTO.getLogin() == null)
                 && !userDTO.getLogin().matches("^[a-zA-Z0-9]+([._]?[a-zA-Z0-9]+)*$")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Login is incorrect");

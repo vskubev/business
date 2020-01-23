@@ -1,7 +1,7 @@
 package com.vskubev.business.authservice.configuration;
 
 import com.vskubev.business.authservice.exception.CustomOAuthException;
-import com.vskubev.business.authservice.service.impl.AuthDetailServiceImpl;
+import com.vskubev.business.authservice.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +33,7 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private AuthDetailServiceImpl userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Bean
     public JwtTokenStore tokenStore() {
