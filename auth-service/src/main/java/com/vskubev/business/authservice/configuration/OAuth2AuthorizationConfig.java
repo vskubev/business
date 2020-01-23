@@ -40,6 +40,11 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
         return new JwtTokenStore(jwtAccessTokenConverter());
     }
 
+
+    /**
+     * Шифрование файла с закрытым ключом
+     * @return
+     */
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         final JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
@@ -56,7 +61,9 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
         clients.inMemory()
                 .withClient("example")
                 .secret("{noop}" + "examplesecret")
+                /** Возможные варианты авторизации **/
                 .authorizedGrantTypes("refresh_token", "password")
+                /** Выдается роль при авторизации **/
                 .authorities("ROLE_CLIENT")
                 .accessTokenValiditySeconds(60 * 60)
                 .refreshTokenValiditySeconds(60 * 60 * 24 * 7)

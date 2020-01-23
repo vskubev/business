@@ -8,10 +8,7 @@ import com.vskubev.business.authservice.service.CrudService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -114,12 +111,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
 
     @PreAuthorize("hasRole('ROLE_CLIENT')")
     public UserDTO getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
-            throw new AccessDeniedException("Access denied");
-        }
-        return userMapper.toDTO(userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new AccessDeniedException("Access denied")));
+        return userMapper.toDTO(securityService.getCurrentUser());
     }
 
     private void checkInput(UserDTO userDTO) {

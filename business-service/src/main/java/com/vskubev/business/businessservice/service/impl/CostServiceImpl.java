@@ -98,6 +98,12 @@ public class CostServiceImpl implements CrudService<CostDTO> {
         return costMapper.toDTO(cost);
     }
 
+    public List<CostDTO> getAllCostsUser(long userId) {
+        return costRepository.findAllByOwnerId(userId).stream()
+                .map(costMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
     public List<CostDTO> getAllCosts() {
         return costRepository.findAll().stream()
                 .map(costMapper::toDTO)
