@@ -1,0 +1,5 @@
+server:
+  port: 9092
+
+auth:
+  basic: ZXhhbXBsZTpleGFtcGxlc2VjcmV0
