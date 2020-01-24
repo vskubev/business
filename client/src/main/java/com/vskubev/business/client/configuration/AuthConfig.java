@@ -14,4 +14,8 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 public class AuthConfig {
     private String basic;
+    private String authServiceUrl;
+    private String clientId;
+    private String clientSecret;
+    private String grantType;
 }

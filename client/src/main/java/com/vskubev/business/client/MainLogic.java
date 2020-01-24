@@ -1,11 +1,9 @@
 package com.vskubev.business.client;
 
-import com.vskubev.business.client.configuration.AuthConfig;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.net.http.HttpClient;
 
 /**
  * @author skubev
@@ -13,13 +11,9 @@ import java.net.http.HttpClient;
 @Component
 public class MainLogic {
 
-    private final HttpClient httpClient;
-    private final AuthConfig authConfig;
     private final Authorization authorization;
 
-    public MainLogic(HttpClient httpClient, AuthConfig authConfig, Authorization authorization) {
-        this.httpClient = httpClient;
-        this.authConfig = authConfig;
+    public MainLogic(Authorization authorization) {
         this.authorization = authorization;
     }
 

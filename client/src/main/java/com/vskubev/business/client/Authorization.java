@@ -1,5 +1,6 @@
 package com.vskubev.business.client;
 
+import com.vskubev.business.client.configuration.AuthConfig;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -14,6 +15,12 @@ import java.io.InputStreamReader;
  */
 @Component
 public class Authorization {
+
+    private final AuthConfig authConfig;
+
+    public Authorization(AuthConfig authConfig) {
+        this.authConfig = authConfig;
+    }
 
     public void auth() throws IOException {
         BufferedReader reader = new BufferedReader(
@@ -45,10 +52,10 @@ public class Authorization {
         String password = reader.readLine();
 
         ResourceOwnerPasswordResourceDetails clientDetails = new ResourceOwnerPasswordResourceDetails();
-        clientDetails.setAccessTokenUri("http://localhost:9090/oauth/token");
-        clientDetails.setClientId("example");
-        clientDetails.setClientSecret("examplesecret");
-        clientDetails.setGrantType("password");
+        clientDetails.setAccessTokenUri(authConfig.getAuthServiceUrl());
+        clientDetails.setClientId(authConfig.getClientId());
+        clientDetails.setClientSecret(authConfig.getClientSecret());
+        clientDetails.setGrantType(authConfig.getGrantType());
         clientDetails.setUsername(login);
         clientDetails.setPassword(password);
 
