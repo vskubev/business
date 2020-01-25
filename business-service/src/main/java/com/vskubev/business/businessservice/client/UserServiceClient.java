@@ -55,4 +55,30 @@ public class UserServiceClient {
             return Optional.empty();
         }
     }
+
+    public Optional<UserDTO> getCurrentUser() {
+        HttpRequest request = HttpRequest.newBuilder()
+                .GET()
+                .header("Authorization", "token")
+                .uri(URI.create(apiConfig.getAuthServiceUrl() + "/users/current"))
+                .build();
+
+        HttpResponse<String> response;
+        try {
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        }
+        /**
+         * Пулл коннектов переполнен или сервис недоступен
+         */
+        catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+        if (response.statusCode() >= 200 && response.statusCode() <= 299) {
+            UserDTO userDTO = gson.fromJson(response.body(), UserDTO.class);
+            return Optional.of(userDTO);
+        } else {
+            return Optional.empty();
+        }
+    }
 }

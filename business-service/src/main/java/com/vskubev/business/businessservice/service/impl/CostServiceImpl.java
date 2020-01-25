@@ -4,6 +4,7 @@ import com.vskubev.business.businessservice.client.UserServiceClient;
 import com.vskubev.business.businessservice.map.CategoryMapper;
 import com.vskubev.business.businessservice.map.CostDTO;
 import com.vskubev.business.businessservice.map.CostMapper;
+import com.vskubev.business.businessservice.map.UserDTO;
 import com.vskubev.business.businessservice.model.Category;
 import com.vskubev.business.businessservice.model.Cost;
 import com.vskubev.business.businessservice.repository.CostRepository;
@@ -104,8 +105,11 @@ public class CostServiceImpl implements CrudService<CostDTO> {
     }
 
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public List<CostDTO> getAllCostsUser(long userId) {
-        return costRepository.findAllByOwnerId(userId).stream()
+    public List<CostDTO> getAllCostsUser() {
+        UserDTO userDTO = userServiceClient.getCurrentUser().orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not found"));
+        long id = userDTO.getId();
+        return costRepository.findAllByOwnerId(id).stream()
                 .map(costMapper::toDTO)
                 .collect(Collectors.toList());
     }

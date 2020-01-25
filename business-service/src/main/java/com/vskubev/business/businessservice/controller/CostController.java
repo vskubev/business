@@ -53,14 +53,14 @@ public class CostController {
                 .body(costService.getById(costId));
     }
 
-    @RequestMapping(value = "/costs/user/{userId}", method = RequestMethod.GET)
-    public ResponseEntity<List<CostDTO>> getAllCostsUser(@PathVariable("userId") long userId) {
+    @RequestMapping(value = "/costs", method = RequestMethod.GET)
+    public ResponseEntity<List<CostDTO>> getAllCostsUser() {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(costService.getAllCostsUser(userId));
+                .body(costService.getAllCostsUser());
     }
 
-    @RequestMapping(value = "/costs", method = RequestMethod.GET)
+    @RequestMapping(value = "/costs/all", method = RequestMethod.GET)
     public ResponseEntity<List<CostDTO>> getAll() {
         return ResponseEntity
                 .status(HttpStatus.OK)
