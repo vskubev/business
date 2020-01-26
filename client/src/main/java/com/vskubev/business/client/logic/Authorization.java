@@ -1,4 +1,4 @@
-package com.vskubev.business.client;
+package com.vskubev.business.client.logic;
 
 import com.vskubev.business.client.configuration.AuthConfig;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -22,9 +22,10 @@ public class Authorization {
         this.authConfig = authConfig;
     }
 
-    public void auth() throws IOException {
+    public OAuth2AccessToken auth() throws IOException {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(System.in));
+        OAuth2AccessToken token = null;
 
         System.out.println("1.sign up");
         System.out.println("2.sign in");
@@ -33,16 +34,18 @@ public class Authorization {
 
         if ("1".equals(answer)) {
             signUp();
+            token = null;
         } else if ("2".equals(answer)) {
-            signIn();
+            token = signIn();
         }
+        return token;
     }
 
     public void signUp() {
 
     }
 
-    public void signIn() throws IOException {
+    public OAuth2AccessToken signIn() throws IOException {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(System.in));
 
@@ -59,9 +62,14 @@ public class Authorization {
         clientDetails.setUsername(login);
         clientDetails.setPassword(password);
 
-        OAuth2RestTemplate oAuth2RestTemplate = new OAuth2RestTemplate(clientDetails);
-        OAuth2AccessToken token = oAuth2RestTemplate.getAccessToken();
-
-        int k = 10;
+        OAuth2AccessToken token = null;
+        try {
+            OAuth2RestTemplate oAuth2RestTemplate = new OAuth2RestTemplate(clientDetails);
+            token = oAuth2RestTemplate.getAccessToken();
+        } catch (Exception e) {
+            System.out.println("Incorrect. Please, try again");
+            signIn();
+        }
+        return token;
     }
 }

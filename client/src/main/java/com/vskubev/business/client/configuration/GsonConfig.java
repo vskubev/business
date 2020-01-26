@@ -1,4 +1,4 @@
-package com.vskubev.business.authservice.configuration;
+package com.vskubev.business.client.configuration;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
