@@ -4,7 +4,7 @@ package com.vskubev.business.client.enums;
  * @author skubev
  */
 
-public enum UserMethodsEnum {
+public enum UserMethods {
     CREATE_USER,
     UPDATE_USER,
     DELETE_USER,

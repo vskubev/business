@@ -30,7 +30,8 @@ public class UserServiceImpl implements CrudService<UserDTO> {
     private final SecurityServiceImpl securityService;
 
     public UserServiceImpl(UserRepository userRepository,
-                           UserMapper userMapper, SecurityServiceImpl securityService) {
+                           UserMapper userMapper,
+                           SecurityServiceImpl securityService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.securityService = securityService;
@@ -103,6 +104,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public List<UserDTO> getUsers() {
         return userRepository.findAll().stream()
                 .map(userMapper::toDTO)

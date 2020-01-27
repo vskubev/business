@@ -41,8 +41,8 @@ public class Authorization {
         return token;
     }
 
-    public void signUp() {
-
+    public OAuth2AccessToken signUp() {
+        return null;
     }
 
     public OAuth2AccessToken signIn() throws IOException {
@@ -68,7 +68,14 @@ public class Authorization {
             token = oAuth2RestTemplate.getAccessToken();
         } catch (Exception e) {
             System.out.println("Incorrect. Please, try again");
-            signIn();
+            System.out.println("1. Try one more time");
+            System.out.println("2. Sign up");
+            String result = reader.readLine();
+            if ("1".equals(result)) {
+                token = signIn();
+            } else {
+                token = signUp();
+            }
         }
         return token;
     }

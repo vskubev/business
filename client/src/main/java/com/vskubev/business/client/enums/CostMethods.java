@@ -4,7 +4,7 @@ package com.vskubev.business.client.enums;
  * @author skubev
  */
 
-public enum CostMethodsEnum {
+public enum CostMethods {
     CREATE_COST,
     UPDATE_COST,
     DELETE_COST,

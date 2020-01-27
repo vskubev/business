@@ -4,7 +4,7 @@ package com.vskubev.business.client.enums;
  * @author skubev
  */
 
-public enum CategoryMethodsEnum {
+public enum CategoryMethods {
     CREATE_CATEGORY,
     UPDATE_CATEGORY,
     DELETE_CATEGORY,
