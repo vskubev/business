@@ -16,6 +16,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author skubev
+ */
 @Component
 public class MethodService {
 
@@ -35,17 +38,47 @@ public class MethodService {
         Arrays.asList(CategoryMethods.values()).forEach(System.out::println);
         Arrays.asList(CostMethods.values()).forEach(System.out::println);
 
+        System.out.println();
+
         String selectMethod = reader.readLine();
 
-        if (UserMethods.GET_USER_BY_ID.name().equals(selectMethod)) {
-            System.out.println("Enter user number");
-            long userId = Long.parseLong(reader.readLine());
-            Optional<UserDTO> userDTO = userServiceClient.getUserById(userId, token);
+        if (UserMethods.CREATE_USER.name().equals(selectMethod)) {
+            System.out.println("Enter login");
+            String login = reader.readLine();
+
+            System.out.println("Enter password");
+            String password = reader.readLine();
+
+            System.out.println("Enter name");
+            String name = reader.readLine();
+
+            System.out.println("Enter email");
+            String email = reader.readLine();
+
+            Optional<UserDTO> userDTO = userServiceClient.create(login, password, name, email);
             if (userDTO.isPresent()) {
                 System.out.println(gson.toJson(userDTO.get()));
             } else {
                 System.out.println("User is not found");
             }
+
+        } else if (UserMethods.UPDATE_USER.name().equals(selectMethod)) {
+
+        } else if (UserMethods.DELETE_USER.name().equals(selectMethod)) {
+            System.out.println("Enter user number");
+            long userId = Long.parseLong(reader.readLine());
+            userServiceClient.delete(userId, token);
+
+        } else if (UserMethods.GET_USER_BY_ID.name().equals(selectMethod)) {
+            System.out.println("Enter user number");
+            long userId = Long.parseLong(reader.readLine());
+            Optional<UserDTO> userDTO = userServiceClient.getUser(userId, token);
+            if (userDTO.isPresent()) {
+                System.out.println(gson.toJson(userDTO.get()));
+            } else {
+                System.out.println("User is not found");
+            }
+
         } else if (UserMethods.GET_CURRENT_USER.name().equals(selectMethod)) {
             Optional<UserDTO> userDTO = userServiceClient.getCurrentUser(token);
             if (userDTO.isPresent()) {
@@ -53,6 +86,7 @@ public class MethodService {
             } else {
                 System.out.println("User is not found");
             }
+
         } else if (UserMethods.GET_ALL_USERS.name().equals(selectMethod)) {
             Optional<List<UserDTO>> userDTOList = userServiceClient.getAll(token);
             if (userDTOList.isPresent()) {

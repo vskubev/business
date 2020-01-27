@@ -1,6 +1,9 @@
 package com.vskubev.business.client.logic;
 
+import com.google.gson.Gson;
+import com.vskubev.business.client.client.UserServiceClient;
 import com.vskubev.business.client.configuration.AuthConfig;
+import com.vskubev.business.client.map.UserDTO;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Optional;
 
 /**
  * @author skubev
@@ -17,9 +21,15 @@ import java.io.InputStreamReader;
 public class Authorization {
 
     private final AuthConfig authConfig;
+    private final UserServiceClient userServiceClient;
+    private final Gson gson;
 
-    public Authorization(AuthConfig authConfig) {
+    public Authorization(AuthConfig authConfig,
+                         UserServiceClient userServiceClient,
+                         Gson gson) {
         this.authConfig = authConfig;
+        this.userServiceClient = userServiceClient;
+        this.gson = gson;
     }
 
     public OAuth2AccessToken auth() throws IOException {
@@ -41,8 +51,33 @@ public class Authorization {
         return token;
     }
 
-    public OAuth2AccessToken signUp() {
-        return null;
+    //TODO избавиться от NPE при авторизации новым юзером
+    public OAuth2AccessToken signUp() throws IOException {
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(System.in));
+
+        System.out.println("Create new user:");
+
+        System.out.println("Enter login");
+        String login = reader.readLine();
+
+        System.out.println("Enter password");
+        String password = reader.readLine();
+
+        System.out.println("Enter name");
+        String name = reader.readLine();
+
+        System.out.println("Enter email");
+        String email = reader.readLine();
+
+        Optional<UserDTO> userDTO = userServiceClient.create(login, password, name, email);
+        if (userDTO.isPresent()) {
+            System.out.println(gson.toJson(userDTO.get()));
+        } else {
+            System.out.println("User is not found");
+        }
+        userServiceClient.create(login, password, name, email);
+        return signIn();
     }
 
     public OAuth2AccessToken signIn() throws IOException {

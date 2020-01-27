@@ -6,13 +6,11 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author skubev
@@ -28,7 +26,60 @@ public class UserServiceClient {
         this.gson = gson;
     }
 
-    public Optional<UserDTO> getUserById(final long userId, OAuth2AccessToken token) {
+    public HttpRequest.BodyPublisher ofFormData(Map<String, String> data) {
+        String serialized = gson.toJson(data);
+        return HttpRequest.BodyPublishers.ofString(serialized);
+    }
+
+    public Optional<UserDTO> create(String login,
+                                    String password,
+                                    String name,
+                                    String email) {
+        Map<String, String> data = new HashMap<>();
+        data.put("login", login);
+        data.put("password", password);
+        data.put("name", name);
+        data.put("email", email);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .POST(ofFormData(data))
+                .uri(URI.create("http://localhost:9090/users"))
+                .header("Content-Type", "application/json")
+                .build();
+
+        HttpResponse<String> response;
+        try {
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+
+        if (response.statusCode() >= 200 && response.statusCode() <= 299) {
+            UserDTO userDTO = gson.fromJson(response.body(), UserDTO.class);
+            return Optional.of(userDTO);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public void delete(final long userId,
+                       OAuth2AccessToken token) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .DELETE()
+                .header("Authorization", "Bearer " + token)
+                .uri(URI.create("http://localhost:9090/users/" + userId))
+                .build();
+
+        try {
+            httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Optional<UserDTO> getUser(final long userId,
+                                     OAuth2AccessToken token) {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .header("Authorization", "Bearer " + token.toString())
@@ -93,7 +144,7 @@ public class UserServiceClient {
             return Optional.empty();
         }
         if (response.statusCode() >= 200 && response.statusCode() <= 299) {
-            List<UserDTO> userDTOList = gson.fromJson(response.body(), (Type) UserDTO.class);
+            List<UserDTO> userDTOList = Arrays.asList(gson.fromJson(response.body(), UserDTO[].class));
             return Optional.of(userDTOList);
         } else {
             return Optional.empty();
