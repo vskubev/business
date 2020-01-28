@@ -129,7 +129,7 @@ public class UserServiceClient {
         }
     }
 
-    public Optional<List<UserDTO>> getAll(OAuth2AccessToken token) {
+    public List<UserDTO> getAll(OAuth2AccessToken token) {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .header("Authorization", "Bearer " + token.toString())
@@ -141,13 +141,12 @@ public class UserServiceClient {
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-            return Optional.empty();
+            return null;
         }
         if (response.statusCode() >= 200 && response.statusCode() <= 299) {
-            List<UserDTO> userDTOList = Arrays.asList(gson.fromJson(response.body(), UserDTO[].class));
-            return Optional.of(userDTOList);
+            return Arrays.asList(gson.fromJson(response.body(), UserDTO[].class));
         } else {
-            return Optional.empty();
+            return null;
         }
     }
 }

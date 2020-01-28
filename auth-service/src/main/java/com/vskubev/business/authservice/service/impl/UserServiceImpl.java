@@ -5,6 +5,7 @@ import com.vskubev.business.authservice.map.UserMapper;
 import com.vskubev.business.authservice.model.User;
 import com.vskubev.business.authservice.repository.UserRepository;
 import com.vskubev.business.authservice.service.CrudService;
+import com.vskubev.business.authservice.service.SecurityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -27,11 +28,11 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements CrudService<UserDTO> {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final SecurityServiceImpl securityService;
+    private final SecurityService securityService;
 
     public UserServiceImpl(UserRepository userRepository,
                            UserMapper userMapper,
-                           SecurityServiceImpl securityService) {
+                           SecurityService securityService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.securityService = securityService;
