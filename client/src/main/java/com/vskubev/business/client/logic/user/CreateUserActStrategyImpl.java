@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Optional;
 
+/**
+ * @author skubev
+ */
 @Component
 public class CreateUserActStrategyImpl implements UserActStrategy {
 

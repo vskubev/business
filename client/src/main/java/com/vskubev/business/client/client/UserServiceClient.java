@@ -31,10 +31,10 @@ public class UserServiceClient {
         return HttpRequest.BodyPublishers.ofString(serialized);
     }
 
-    public Optional<UserDTO> create(String login,
-                                    String password,
-                                    String name,
-                                    String email) {
+    public Optional<UserDTO> create(final String login,
+                                    final String password,
+                                    final String name,
+                                    final String email) {
         Map<String, String> data = new HashMap<>();
         data.put("login", login);
         data.put("password", password);
@@ -45,6 +45,49 @@ public class UserServiceClient {
                 .POST(ofFormData(data))
                 .uri(URI.create("http://localhost:9090/users"))
                 .header("Content-Type", "application/json")
+                .build();
+
+        HttpResponse<String> response;
+        try {
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+
+        if (response.statusCode() >= 200 && response.statusCode() <= 299) {
+            UserDTO userDTO = gson.fromJson(response.body(), UserDTO.class);
+            return Optional.of(userDTO);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<UserDTO> update(final String login,
+                                    final String password,
+                                    final String name,
+                                    final String email,
+                                    final long userId,
+                                    OAuth2AccessToken token) {
+        Map<String, String> data = new HashMap<>();
+        if (!login.equals("")) {
+            data.put("login", login);
+        }
+        if (!password.equals("")) {
+            data.put("password", password);
+        }
+        if (!name.equals("")) {
+            data.put("name", name);
+        }
+        if (!email.equals("")) {
+            data.put("email", email);
+        }
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .PUT(ofFormData(data))
+                .uri(URI.create("http://localhost:9090/users/" + userId))
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + token)
                 .build();
 
         HttpResponse<String> response;

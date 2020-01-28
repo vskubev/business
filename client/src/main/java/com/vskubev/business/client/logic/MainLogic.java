@@ -45,12 +45,10 @@ public class MainLogic {
 
             methodService.selectMethod(token);
 
-            System.out.println("One more operation? y/n");
-            String moreOperation = reader.readLine();
-            if ("n".equals(moreOperation)) {
+            System.out.println("One more operation? Y/N");
+            if ("N".equals(reader.readLine().toUpperCase())) {
 
             }
-
         }
     }
 }

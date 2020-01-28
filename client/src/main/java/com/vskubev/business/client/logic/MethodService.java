@@ -56,7 +56,7 @@ public class MethodService {
 
         System.out.println();
 
-        String selectMethod = reader.readLine();
+        String selectMethod = reader.readLine().toUpperCase();
 
         if (UserMethods.CREATE_USER.name().equals(selectMethod)) {
             createUserActStrategy.act(token);

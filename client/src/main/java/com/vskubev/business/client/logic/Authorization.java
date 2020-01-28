@@ -33,8 +33,7 @@ public class Authorization {
     }
 
     public OAuth2AccessToken auth() throws IOException {
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(System.in));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         OAuth2AccessToken token = null;
 
         System.out.println("1.sign up");

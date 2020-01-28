@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * @author skubev
+ */
 @Component
 public class GetAllUserActStrategyImpl implements UserActStrategy {
 
