@@ -1,7 +1,5 @@
 package com.vskubev.business.client.logic;
 
-import com.google.gson.Gson;
-import com.vskubev.business.client.client.UserServiceClient;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Component;
 
@@ -17,17 +15,11 @@ import java.io.InputStreamReader;
 public class MainLogic {
 
     private final Authorization authorization;
-    private final UserServiceClient userServiceClient;
-    private final Gson gson;
     private final UserActivityFacade userActivityFacade;
 
     public MainLogic(Authorization authorization,
-                     UserServiceClient userServiceClient,
-                     Gson gson,
                      UserActivityFacade userActivityFacade) {
         this.authorization = authorization;
-        this.userServiceClient = userServiceClient;
-        this.gson = gson;
         this.userActivityFacade = userActivityFacade;
     }
 

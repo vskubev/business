@@ -21,7 +21,6 @@ public class DeleteCategoryActStrategy implements CategoryActStrategy {
         this.gson = gson;
     }
 
-
     @Override
     public void act(OAuth2AccessToken token) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));

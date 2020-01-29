@@ -6,6 +6,7 @@ import com.vskubev.business.client.enums.CategoryMethods;
 import com.vskubev.business.client.enums.CostMethods;
 import com.vskubev.business.client.enums.UserMethods;
 import com.vskubev.business.client.logic.category.*;
+import com.vskubev.business.client.logic.cost.*;
 import com.vskubev.business.client.logic.user.*;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Component;
@@ -34,6 +35,12 @@ public class UserActivityFacade {
     private final CategoryActStrategy deleteCategoryActStrategy;
     private final CategoryActStrategy createCategoryActStrategy;
     private final CategoryActStrategy updateCategoryActStrategy;
+    private final CostActStrategy getAllCostActStrategy;
+    private final CostActStrategy getAllCostUserActStrategy;
+    private final CostActStrategy getCostActStrategy;
+    private final CostActStrategy createCostActStrategy;
+    private final CostActStrategy updateCostActStrategy;
+    private final CostActStrategy deleteCostActStrategy;
 
     public UserActivityFacade(UserServiceClient userServiceClient,
                               Gson gson,
@@ -47,7 +54,13 @@ public class UserActivityFacade {
                               GetAllCategoryActStrategy getAllCategoryActStrategy,
                               DeleteCategoryActStrategy deleteCategoryActStrategy,
                               CreateCategoryActStrategy createCategoryActStrategy,
-                              UpdateCategoryActStrategy updateCategoryActStrategy) {
+                              UpdateCategoryActStrategy updateCategoryActStrategy,
+                              GetAllCostActStrategy getAllCostActStrategy,
+                              GetAllCostUserActStrategy getAllCostUserActStrategy,
+                              GetCostActStrategy getCostActStrategy,
+                              CreateCostActStrategy createCostActStrategy,
+                              UpdateCostActStrategy updateCostActStrategy,
+                              DeleteCostActStrategy deleteCostActStrategy) {
         this.userServiceClient = userServiceClient;
         this.gson = gson;
         this.createUserActStrategy = createUserActStrategy;
@@ -61,6 +74,12 @@ public class UserActivityFacade {
         this.deleteCategoryActStrategy = deleteCategoryActStrategy;
         this.createCategoryActStrategy = createCategoryActStrategy;
         this.updateCategoryActStrategy = updateCategoryActStrategy;
+        this.getAllCostActStrategy = getAllCostActStrategy;
+        this.getAllCostUserActStrategy = getAllCostUserActStrategy;
+        this.getCostActStrategy = getCostActStrategy;
+        this.createCostActStrategy = createCostActStrategy;
+        this.updateCostActStrategy = updateCostActStrategy;
+        this.deleteCostActStrategy = deleteCostActStrategy;
     }
 
     public void selectMethod(final OAuth2AccessToken token) throws IOException {
@@ -96,6 +115,18 @@ public class UserActivityFacade {
             getCategoryActStrategy.act(token);
         } else if (CategoryMethods.GET_ALL_CATEGORIES.name().equals(selectMethod)) {
             getAllCategoryActStrategy.act(token);
+        } else if (CostMethods.CREATE_COST.equals(selectMethod)) {
+            createCostActStrategy.act(token);
+        } else if (CostMethods.UPDATE_COST.equals(selectMethod)) {
+            updateCostActStrategy.act(token);
+        } else if (CostMethods.DELETE_COST.equals(selectMethod)) {
+            deleteCostActStrategy.act(token);
+        } else if (CostMethods.GET_COST_BY_ID.equals(selectMethod)) {
+            getCostActStrategy.act(token);
+        } else if (CostMethods.GET_ALL_COSTS_USER.equals(selectMethod)) {
+            getAllCostUserActStrategy.act(token);
+        } else if (CostMethods.GET_ALL_COSTS.equals(selectMethod)) {
+            getAllCostActStrategy.act(token);
         }
     }
 }

@@ -33,7 +33,7 @@ public class CreateCategoryActStrategy implements CategoryActStrategy {
         System.out.println("Enter ownerId");
         final String ownerId = reader.readLine();
 
-        Optional<CategoryDTO> categoryDTO = categoryServiceClient.create(name, ownerId);
+        Optional<CategoryDTO> categoryDTO = categoryServiceClient.create(name, ownerId, token);
         if (categoryDTO.isPresent()) {
             System.out.println(gson.toJson(categoryDTO.get()));
         } else {

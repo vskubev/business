@@ -1,7 +1,7 @@
 package com.vskubev.business.client.client;
 
 import com.google.gson.Gson;
-import com.vskubev.business.client.map.CategoryDTO;
+import com.vskubev.business.client.map.CostDTO;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Component;
 
@@ -13,13 +13,13 @@ import java.net.http.HttpResponse;
 import java.util.*;
 
 @Component
-public class CategoryServiceClient {
+public class CostServiceClient {
 
     private final HttpClient httpClient;
     private final Gson gson;
 
-    public CategoryServiceClient(HttpClient httpClient,
-                                 Gson gson) {
+    public CostServiceClient(HttpClient httpClient,
+                             Gson gson) {
         this.httpClient = httpClient;
         this.gson = gson;
     }
@@ -29,17 +29,18 @@ public class CategoryServiceClient {
         return HttpRequest.BodyPublishers.ofString(serialized);
     }
 
-    public Optional<CategoryDTO> create(final String name,
-                                        final String ownerId,
-                                        final OAuth2AccessToken token) {
+    public Optional<CostDTO> create(final String price,
+                                    final String ownerId,
+                                    final String categoryId,
+                                    final OAuth2AccessToken token) {
         Map<String, String> data = new HashMap<>();
-        data.put("name", name);
+        data.put("price", price);
         data.put("ownerId", ownerId);
-
+        data.put("categoryId", categoryId);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .POST(ofFormData(data))
-                .uri(URI.create("http://localhost:9091/categories"))
+                .uri(URI.create("http://localhost:9091/costs"))
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + token)
                 .build();
@@ -53,24 +54,28 @@ public class CategoryServiceClient {
         }
 
         if (response.statusCode() >= 200 && response.statusCode() <= 299) {
-            CategoryDTO categoryDTO = gson.fromJson(response.body(), CategoryDTO.class);
-            return Optional.of(categoryDTO);
+            CostDTO costDTO = gson.fromJson(response.body(), CostDTO.class);
+            return Optional.of(costDTO);
         } else {
             return Optional.empty();
         }
     }
 
-    public Optional<CategoryDTO> update(final String name,
-                                        final long categoryId,
-                                        final OAuth2AccessToken token) {
+    public Optional<CostDTO> update(final String price,
+                                    final String categoryId,
+                                    final long costId,
+                                    final OAuth2AccessToken token) {
         Map<String, String> data = new HashMap<>();
-        if (!name.equals("")) {
-            data.put("name", name);
+        if (!price.equals("")) {
+            data.put("price", price);
+        }
+        if (!categoryId.equals("")) {
+            data.put("categoryId", categoryId);
         }
 
         HttpRequest request = HttpRequest.newBuilder()
                 .PUT(ofFormData(data))
-                .uri(URI.create("http://localhost:9091/categories/" + categoryId))
+                .uri(URI.create("http://localhost:9091/costs/" + costId))
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + token)
                 .build();
@@ -84,19 +89,19 @@ public class CategoryServiceClient {
         }
 
         if (response.statusCode() >= 200 && response.statusCode() <= 299) {
-            CategoryDTO categoryDTO = gson.fromJson(response.body(), CategoryDTO.class);
-            return Optional.of(categoryDTO);
+            CostDTO costDTO = gson.fromJson(response.body(), CostDTO.class);
+            return Optional.of(costDTO);
         } else {
             return Optional.empty();
         }
     }
 
-    public void delete(final long categoryId,
+    public void delete(final long costId,
                        final OAuth2AccessToken token) {
         HttpRequest request = HttpRequest.newBuilder()
                 .DELETE()
                 .header("Authorization", "Bearer " + token)
-                .uri(URI.create("http://localhost:9091/categories/" + categoryId))
+                .uri(URI.create("http://localhost:9091/costs/" + costId))
                 .build();
 
         try {
@@ -106,12 +111,12 @@ public class CategoryServiceClient {
         }
     }
 
-    public Optional<CategoryDTO> getCategory(final long categoryId,
-                                             final OAuth2AccessToken token) {
+    public Optional<CostDTO> getCost(final long costId,
+                                     final OAuth2AccessToken token) {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .header("Authorization", "Bearer " + token.toString())
-                .uri(URI.create("http://localhost:9091/categories/" + categoryId))
+                .uri(URI.create("http://localhost:9091/costs/" + costId))
                 .build();
 
         HttpResponse<String> response;
@@ -125,18 +130,18 @@ public class CategoryServiceClient {
             return Optional.empty();
         }
         if (response.statusCode() >= 200 && response.statusCode() <= 299) {
-            CategoryDTO categoryDTO = gson.fromJson(response.body(), CategoryDTO.class);
-            return Optional.of(categoryDTO);
+            CostDTO costDTO = gson.fromJson(response.body(), CostDTO.class);
+            return Optional.of(costDTO);
         } else {
             return Optional.empty();
         }
     }
 
-    public List<CategoryDTO> getAll(final OAuth2AccessToken token) {
+    public List<CostDTO> getAllCostsUser(final OAuth2AccessToken token) {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .header("Authorization", "Bearer " + token.toString())
-                .uri(URI.create("http://localhost:9091/categories"))
+                .uri(URI.create("http://localhost:9091/costs"))
                 .build();
 
         HttpResponse<String> response;
@@ -147,7 +152,28 @@ public class CategoryServiceClient {
             return Collections.emptyList();
         }
         if (response.statusCode() >= 200 && response.statusCode() <= 299) {
-            return Arrays.asList(gson.fromJson(response.body(), CategoryDTO[].class));
+            return Arrays.asList(gson.fromJson(response.body(), CostDTO[].class));
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    public List<CostDTO> getAll(final OAuth2AccessToken token) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .GET()
+                .header("Authorization", "Bearer " + token.toString())
+                .uri(URI.create("http://localhost:9091/costs/all"))
+                .build();
+
+        HttpResponse<String> response;
+        try {
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+        if (response.statusCode() >= 200 && response.statusCode() <= 299) {
+            return Arrays.asList(gson.fromJson(response.body(), CostDTO[].class));
         } else {
             return Collections.emptyList();
         }
