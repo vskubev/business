@@ -12,20 +12,20 @@ import java.io.InputStreamReader;
  * @author skubev
  */
 @Component
-public class DeleteUserActStrategyImpl implements UserActStrategy {
+public class DeleteUserActStrategy implements UserActStrategy {
 
     private final UserServiceClient userServiceClient;
 
-    public DeleteUserActStrategyImpl(UserServiceClient userServiceClient) {
+    public DeleteUserActStrategy(UserServiceClient userServiceClient) {
         this.userServiceClient = userServiceClient;
     }
 
     @Override
-    public void act(OAuth2AccessToken token) throws IOException {
+    public void act(final OAuth2AccessToken token) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         System.out.println("Enter user number");
-        long userId = Long.parseLong(reader.readLine());
+        final long userId = Long.parseLong(reader.readLine());
         userServiceClient.delete(userId, token);
     }
 }

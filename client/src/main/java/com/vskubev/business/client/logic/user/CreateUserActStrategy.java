@@ -15,26 +15,34 @@ import java.util.Optional;
  * @author skubev
  */
 @Component
-public class GetUserActStrategyImpl implements UserActStrategy {
+public class CreateUserActStrategy implements UserActStrategy {
 
     private final UserServiceClient userServiceClient;
     private final Gson gson;
 
-    public GetUserActStrategyImpl(UserServiceClient userServiceClient,
-                                  Gson gson) {
+    public CreateUserActStrategy(UserServiceClient userServiceClient,
+                                 Gson gson) {
         this.userServiceClient = userServiceClient;
         this.gson = gson;
     }
 
     @Override
-    public void act(OAuth2AccessToken token) throws IOException {
+    public void act(final OAuth2AccessToken token) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-        System.out.println("Enter user number");
-        long userId = Long.parseLong(reader.readLine());
+        System.out.println("Enter login");
+        final String login = reader.readLine();
 
-        Optional<UserDTO> userDTO = userServiceClient.getUser(userId, token);
+        System.out.println("Enter password");
+        final String password = reader.readLine();
 
+        System.out.println("Enter name");
+        final String name = reader.readLine();
+
+        System.out.println("Enter email");
+        final String email = reader.readLine();
+
+        Optional<UserDTO> userDTO = userServiceClient.create(login, password, name, email);
         if (userDTO.isPresent()) {
             System.out.println(gson.toJson(userDTO.get()));
         } else {

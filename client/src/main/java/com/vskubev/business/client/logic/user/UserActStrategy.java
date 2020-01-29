@@ -6,5 +6,5 @@ import java.io.IOException;
 
 public interface UserActStrategy {
 
-    void act(OAuth2AccessToken token) throws IOException;
+    void act(final OAuth2AccessToken token) throws IOException;
 }

@@ -19,16 +19,16 @@ public class MainLogic {
     private final Authorization authorization;
     private final UserServiceClient userServiceClient;
     private final Gson gson;
-    private final MethodService methodService;
+    private final UserActivityFacade userActivityFacade;
 
     public MainLogic(Authorization authorization,
                      UserServiceClient userServiceClient,
                      Gson gson,
-                     MethodService methodService) {
+                     UserActivityFacade userActivityFacade) {
         this.authorization = authorization;
         this.userServiceClient = userServiceClient;
         this.gson = gson;
-        this.methodService = methodService;
+        this.userActivityFacade = userActivityFacade;
     }
 
     @PostConstruct
@@ -43,7 +43,7 @@ public class MainLogic {
                 isAuth = true;
             }
 
-            methodService.selectMethod(token);
+            userActivityFacade.selectMethod(token);
 
             System.out.println("One more operation? Y/N");
             if ("N".equals(reader.readLine().toUpperCase())) {

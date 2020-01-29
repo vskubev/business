@@ -5,6 +5,7 @@ import com.vskubev.business.client.client.UserServiceClient;
 import com.vskubev.business.client.enums.CategoryMethods;
 import com.vskubev.business.client.enums.CostMethods;
 import com.vskubev.business.client.enums.UserMethods;
+import com.vskubev.business.client.logic.category.*;
 import com.vskubev.business.client.logic.user.*;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,7 @@ import java.util.Arrays;
  * @author skubev
  */
 @Component
-public class MethodService {
+public class UserActivityFacade {
 
     private final UserServiceClient userServiceClient;
     private final Gson gson;
@@ -28,15 +29,25 @@ public class MethodService {
     private final UserActStrategy getUserActStrategy;
     private final UserActStrategy getCurrentUserActStrategy;
     private final UserActStrategy getAllUserActStrategy;
+    private final CategoryActStrategy getCategoryActStrategy;
+    private final CategoryActStrategy getAllCategoryActStrategy;
+    private final CategoryActStrategy deleteCategoryActStrategy;
+    private final CategoryActStrategy createCategoryActStrategy;
+    private final CategoryActStrategy updateCategoryActStrategy;
 
-    public MethodService(UserServiceClient userServiceClient,
-                         Gson gson,
-                         CreateUserActStrategyImpl createUserActStrategy,
-                         UpdateUserActStrategyImpl updateUserActStrategy,
-                         DeleteUserActStrategyImpl deleteUserActStrategy,
-                         GetUserActStrategyImpl getUserActStrategy,
-                         GetCurrentUserActStrategyImpl getCurrentUserActStrategy,
-                         GetAllUserActStrategyImpl getAllUserActStrategy) {
+    public UserActivityFacade(UserServiceClient userServiceClient,
+                              Gson gson,
+                              CreateUserActStrategy createUserActStrategy,
+                              UpdateUserActStrategy updateUserActStrategy,
+                              DeleteUserActStrategy deleteUserActStrategy,
+                              GetUserActStrategy getUserActStrategy,
+                              GetCurrentUserActStrategy getCurrentUserActStrategy,
+                              GetAllUserActStrategy getAllUserActStrategy,
+                              GetCategoryActStrategy getCategoryActStrategy,
+                              GetAllCategoryActStrategy getAllCategoryActStrategy,
+                              DeleteCategoryActStrategy deleteCategoryActStrategy,
+                              CreateCategoryActStrategy createCategoryActStrategy,
+                              UpdateCategoryActStrategy updateCategoryActStrategy) {
         this.userServiceClient = userServiceClient;
         this.gson = gson;
         this.createUserActStrategy = createUserActStrategy;
@@ -45,9 +56,14 @@ public class MethodService {
         this.getUserActStrategy = getUserActStrategy;
         this.getCurrentUserActStrategy = getCurrentUserActStrategy;
         this.getAllUserActStrategy = getAllUserActStrategy;
+        this.getCategoryActStrategy = getCategoryActStrategy;
+        this.getAllCategoryActStrategy = getAllCategoryActStrategy;
+        this.deleteCategoryActStrategy = deleteCategoryActStrategy;
+        this.createCategoryActStrategy = createCategoryActStrategy;
+        this.updateCategoryActStrategy = updateCategoryActStrategy;
     }
 
-    public void selectMethod(OAuth2AccessToken token) throws IOException {
+    public void selectMethod(final OAuth2AccessToken token) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         Arrays.asList(UserMethods.values()).forEach(System.out::println);
@@ -70,6 +86,16 @@ public class MethodService {
             getCurrentUserActStrategy.act(token);
         } else if (UserMethods.GET_ALL_USERS.name().equals(selectMethod)) {
             getAllUserActStrategy.act(token);
+        } else if (CategoryMethods.CREATE_CATEGORY.name().equals(selectMethod)) {
+            createCategoryActStrategy.act(token);
+        } else if (CategoryMethods.UPDATE_CATEGORY.name().equals(selectMethod)) {
+            updateCategoryActStrategy.act(token);
+        } else if (CategoryMethods.DELETE_CATEGORY.name().equals(selectMethod)) {
+            deleteCategoryActStrategy.act(token);
+        } else if (CategoryMethods.GET_CATEGORY_BY_ID.name().equals(selectMethod)) {
+            getCategoryActStrategy.act(token);
+        } else if (CategoryMethods.GET_ALL_CATEGORIES.name().equals(selectMethod)) {
+            getAllCategoryActStrategy.act(token);
         }
     }
 }

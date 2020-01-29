@@ -15,35 +15,35 @@ import java.util.Optional;
  * @author skubev
  */
 @Component
-public class UpdateUserActStrategyImpl implements UserActStrategy {
+public class UpdateUserActStrategy implements UserActStrategy {
 
     private final UserServiceClient userServiceClient;
     private final Gson gson;
 
-    public UpdateUserActStrategyImpl(UserServiceClient userServiceClient,
-                                     Gson gson) {
+    public UpdateUserActStrategy(UserServiceClient userServiceClient,
+                                 Gson gson) {
         this.userServiceClient = userServiceClient;
         this.gson = gson;
     }
 
     @Override
-    public void act(OAuth2AccessToken token) throws IOException {
+    public void act(final OAuth2AccessToken token) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         Optional<UserDTO> userDTO = userServiceClient.getCurrentUser(token);
-        long userId = userDTO.get().getId();
+        final long userId = userDTO.get().getId();
 
         System.out.println("Enter login");
-        String login = reader.readLine();
+        final String login = reader.readLine();
 
         System.out.println("Enter password");
-        String password = reader.readLine();
+        final String password = reader.readLine();
 
         System.out.println("Enter name");
-        String name = reader.readLine();
+        final String name = reader.readLine();
 
         System.out.println("Enter email");
-        String email = reader.readLine();
+        final String email = reader.readLine();
 
         Optional<UserDTO> userDTOUpdate = userServiceClient.update(login, password, name, email, userId, token);
 
