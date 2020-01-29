@@ -42,8 +42,7 @@ public class Authorization {
         String answer = reader.readLine();
 
         if ("1".equals(answer)) {
-            signUp();
-            token = null;
+            token = signUp();
         } else if ("2".equals(answer)) {
             token = signIn();
         }
