@@ -1,0 +1,9 @@
+server:
+  port: 9092
+
+auth:
+  basic: ZXhhbXBsZTpleGFtcGxlc2VjcmV0
+  auth-service-url: http://localhost:9090/oauth/token
+  client-id: example
+  client-secret: examplesecret
+  grant-type: password

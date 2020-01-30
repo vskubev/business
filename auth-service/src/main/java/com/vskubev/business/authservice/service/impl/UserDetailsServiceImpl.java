@@ -1,7 +1,7 @@
 package com.vskubev.business.authservice.service.impl;
 
+import com.vskubev.business.authservice.model.CurrentProfile;
 import com.vskubev.business.authservice.model.User;
-import com.vskubev.business.authservice.model.UserAwareUserDetails;
 import com.vskubev.business.authservice.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,11 +14,11 @@ import java.util.Optional;
  * @author skubev
  */
 @Service
-public class AuthDetailServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public AuthDetailServiceImpl(UserRepository userRepository) {
+    public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -32,6 +32,6 @@ public class AuthDetailServiceImpl implements UserDetailsService {
         }
 
         User user = userOptional.get();
-        return new UserAwareUserDetails(user);
+        return new CurrentProfile(user);
     }
 }

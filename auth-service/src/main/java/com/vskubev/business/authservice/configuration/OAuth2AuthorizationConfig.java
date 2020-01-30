@@ -1,7 +1,7 @@
 package com.vskubev.business.authservice.configuration;
 
 import com.vskubev.business.authservice.exception.CustomOAuthException;
-import com.vskubev.business.authservice.service.impl.AuthDetailServiceImpl;
+import com.vskubev.business.authservice.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -33,13 +33,18 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private AuthDetailServiceImpl userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Bean
     public JwtTokenStore tokenStore() {
         return new JwtTokenStore(jwtAccessTokenConverter());
     }
 
+
+    /**
+     * Шифрование файла с закрытым ключом
+     * @return
+     */
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         final JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
@@ -56,7 +61,9 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
         clients.inMemory()
                 .withClient("example")
                 .secret("{noop}" + "examplesecret")
+                /** Возможные варианты авторизации **/
                 .authorizedGrantTypes("refresh_token", "password")
+                /** Выдается роль при авторизации **/
                 .authorities("ROLE_CLIENT")
                 .accessTokenValiditySeconds(60 * 60)
                 .refreshTokenValiditySeconds(60 * 60 * 24 * 7)

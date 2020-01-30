@@ -9,6 +9,7 @@ import com.vskubev.business.businessservice.service.CrudService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -38,6 +39,7 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public CategoryDTO create(CategoryDTO categoryDTO) {
         checkInput(categoryDTO);
         checkCategoryUniqueness(categoryDTO);
@@ -56,8 +58,9 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public CategoryDTO update(long id, CategoryDTO categoryDTO) {
-        checkInputWithoutNPE(categoryDTO);
+        checkInputForUpdate(categoryDTO);
         checkCategoryUniqueness(categoryDTO);
 
         Optional<Category> category = categoryRepository.findById(id);
@@ -78,6 +81,7 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public void deleteById(long id) {
         try {
             categoryRepository.deleteById(id);
@@ -88,6 +92,7 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public CategoryDTO getById(long id) {
         Category category = categoryRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category is not found"));
@@ -117,7 +122,7 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
         }
     }
 
-    private void checkInputWithoutNPE(CategoryDTO categoryDTO) {
+    private void checkInputForUpdate(CategoryDTO categoryDTO) {
         if (!(categoryDTO.getName() == null)
                 && !categoryDTO.getName().matches("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,

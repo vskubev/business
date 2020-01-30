@@ -5,13 +5,11 @@ import com.vskubev.business.authservice.map.UserMapper;
 import com.vskubev.business.authservice.model.User;
 import com.vskubev.business.authservice.repository.UserRepository;
 import com.vskubev.business.authservice.service.CrudService;
+import com.vskubev.business.authservice.service.SecurityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -30,10 +28,11 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements CrudService<UserDTO> {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final SecurityServiceImpl securityService;
+    private final SecurityService securityService;
 
     public UserServiceImpl(UserRepository userRepository,
-                           UserMapper userMapper, SecurityServiceImpl securityService) {
+                           UserMapper userMapper,
+                           SecurityService securityService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.securityService = securityService;
@@ -55,8 +54,9 @@ public class UserServiceImpl implements CrudService<UserDTO> {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public UserDTO update(long id, UserDTO userDTO) {
-        checkInputWithoutNPE(userDTO);
+        checkInputForUpdate(userDTO);
         checkUserUniqueness(userDTO);
 
         Optional<User> user = userRepository.findById(id);
@@ -66,7 +66,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
                 user.get().setLogin(userDTO.getLogin());
             }
             if (userDTO.getPassword() != null) {
-                user.get().setHashPassword(userDTO.getPassword());
+                user.get().setHashPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
             }
             if (userDTO.getName() != null) {
                 user.get().setName(userDTO.getName());
@@ -82,6 +82,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public void deleteById(long id) {
         try {
             userRepository.deleteById(id);
@@ -104,19 +105,16 @@ public class UserServiceImpl implements CrudService<UserDTO> {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public List<UserDTO> getUsers() {
         return userRepository.findAll().stream()
                 .map(userMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public UserDTO getCurrentUserOr403() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
-            throw new AccessDeniedException("Access denied");
-        }
-        return userMapper.toDTO(userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new AccessDeniedException("Access denied")));
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
+    public UserDTO getCurrentUser() {
+        return userMapper.toDTO(securityService.getCurrentUser());
     }
 
     private void checkInput(UserDTO userDTO) {
@@ -151,7 +149,7 @@ public class UserServiceImpl implements CrudService<UserDTO> {
         }
     }
 
-    private void checkInputWithoutNPE(UserDTO userDTO) {
+    private void checkInputForUpdate(UserDTO userDTO) {
         if (!(userDTO.getLogin() == null)
                 && !userDTO.getLogin().matches("^[a-zA-Z0-9]+([._]?[a-zA-Z0-9]+)*$")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Login is incorrect");

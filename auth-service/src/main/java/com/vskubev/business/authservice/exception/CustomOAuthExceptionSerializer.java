@@ -31,5 +31,4 @@ public class CustomOAuthExceptionSerializer extends StdSerializer<CustomOAuthExc
         }
         jsonGenerator.writeEndObject();
     }
-
 }

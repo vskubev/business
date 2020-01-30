@@ -13,10 +13,11 @@ public class MethodSecurityExpressionRoot extends SecurityExpressionRoot impleme
     private Object returnObject;
     private Object target;
 
-  /** Creates a new instance
-   *
-   * @param authentication the {@link Authentication} to use. Cannot be null.
-   */
+    /**
+     * Creates a new instance
+     *
+     * @param authentication the {@link Authentication} to use. Cannot be null.
+     */
     public MethodSecurityExpressionRoot(Authentication authentication) {
         super(authentication);
     }
@@ -41,12 +42,13 @@ public class MethodSecurityExpressionRoot extends SecurityExpressionRoot impleme
         return returnObject;
     }
 
-  /** Sets the "this" property for use in expressions. Typically this will be the "this"
-   * property of the {@code JoinPoint} representing the method invocation which is being
-   * protected.
-   *
-   * @param target the target object on which the method in is being invoked.
-   */
+    /**
+     * Sets the "this" property for use in expressions. Typically this will be the "this"
+     * property of the {@code JoinPoint} representing the method invocation which is being
+     * protected.
+     *
+     * @param target the target object on which the method in is being invoked.
+     */
     void setThis(Object target) {
         this.target = target;
     }

@@ -13,6 +13,9 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.WebUtils;
 
+/**
+ * @author skubev
+ */
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {

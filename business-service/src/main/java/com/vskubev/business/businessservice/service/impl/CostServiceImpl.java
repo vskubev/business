@@ -4,6 +4,7 @@ import com.vskubev.business.businessservice.client.UserServiceClient;
 import com.vskubev.business.businessservice.map.CategoryMapper;
 import com.vskubev.business.businessservice.map.CostDTO;
 import com.vskubev.business.businessservice.map.CostMapper;
+import com.vskubev.business.businessservice.map.UserDTO;
 import com.vskubev.business.businessservice.model.Category;
 import com.vskubev.business.businessservice.model.Cost;
 import com.vskubev.business.businessservice.repository.CostRepository;
@@ -11,6 +12,7 @@ import com.vskubev.business.businessservice.service.CrudService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -45,6 +47,7 @@ public class CostServiceImpl implements CrudService<CostDTO> {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public CostDTO create(CostDTO costDTO) {
         checkInput(costDTO);
 
@@ -63,6 +66,7 @@ public class CostServiceImpl implements CrudService<CostDTO> {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public CostDTO update(long id, CostDTO costDTO) {
         Optional<Cost> cost = costRepository.findById(id);
 
@@ -82,6 +86,7 @@ public class CostServiceImpl implements CrudService<CostDTO> {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public void deleteById(long id) {
         try {
             costRepository.deleteById(id);
@@ -92,10 +97,21 @@ public class CostServiceImpl implements CrudService<CostDTO> {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public CostDTO getById(long id) {
         Cost cost = costRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cost is not found"));
         return costMapper.toDTO(cost);
+    }
+
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
+    public List<CostDTO> getAllCostsUser() {
+        UserDTO userDTO = userServiceClient.getCurrentUser().orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not found"));
+        long id = userDTO.getId();
+        return costRepository.findAllByOwnerId(id).stream()
+                .map(costMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     public List<CostDTO> getAllCosts() {

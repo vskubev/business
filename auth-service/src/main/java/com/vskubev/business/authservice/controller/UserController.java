@@ -64,6 +64,6 @@ public class UserController {
     public ResponseEntity<UserDTO> getCurrentUser() {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.getCurrentUserOr403());
+                .body(userService.getCurrentUser());
     }
 }

@@ -54,6 +54,13 @@ public class CostController {
     }
 
     @RequestMapping(value = "/costs", method = RequestMethod.GET)
+    public ResponseEntity<List<CostDTO>> getAllCostsUser() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(costService.getAllCostsUser());
+    }
+
+    @RequestMapping(value = "/costs/all", method = RequestMethod.GET)
     public ResponseEntity<List<CostDTO>> getAll() {
         return ResponseEntity
                 .status(HttpStatus.OK)

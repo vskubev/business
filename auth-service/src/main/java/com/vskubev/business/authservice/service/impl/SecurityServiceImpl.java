@@ -29,5 +29,4 @@ public class SecurityServiceImpl implements SecurityService {
         return userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new AccessDeniedException("Access denied"));
     }
-
 }
