@@ -2,6 +2,7 @@ package com.vskubev.business.client.logic.cost;
 
 import com.google.gson.Gson;
 import com.vskubev.business.client.client.CostServiceClient;
+import com.vskubev.business.client.logic.user.UserActStrategy;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 @Component
-public class DeleteCostActStrategy implements CostActStrategy {
+public class DeleteCostActStrategy implements UserActStrategy {
 
     private final CostServiceClient costServiceClient;
     private final Gson gson;
@@ -22,7 +23,7 @@ public class DeleteCostActStrategy implements CostActStrategy {
     }
 
     @Override
-    public void act(OAuth2AccessToken token) throws IOException {
+    public void act(final OAuth2AccessToken token) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         System.out.println("Enter cost id");

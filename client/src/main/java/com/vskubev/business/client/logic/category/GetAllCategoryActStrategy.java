@@ -2,6 +2,7 @@ package com.vskubev.business.client.logic.category;
 
 import com.google.gson.Gson;
 import com.vskubev.business.client.client.CategoryServiceClient;
+import com.vskubev.business.client.logic.user.UserActStrategy;
 import com.vskubev.business.client.map.CategoryDTO;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Component
-public class GetAllCategoryActStrategy implements CategoryActStrategy {
+public class GetAllCategoryActStrategy implements UserActStrategy {
 
     private final CategoryServiceClient categoryServiceClient;
     private final Gson gson;

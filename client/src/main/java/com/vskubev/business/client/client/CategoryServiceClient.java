@@ -32,32 +32,33 @@ public class CategoryServiceClient {
     public Optional<CategoryDTO> create(final String name,
                                         final String ownerId,
                                         final OAuth2AccessToken token) {
-        Map<String, String> data = new HashMap<>();
-        data.put("name", name);
-        data.put("ownerId", ownerId);
+        if (name != null && !name.isEmpty()) {
+            Map<String, String> data = new HashMap<>();
+            data.put("name", name);
+            data.put("ownerId", ownerId);
 
+            HttpRequest request = HttpRequest.newBuilder()
+                    .POST(ofFormData(data))
+                    .uri(URI.create("http://localhost:9091/categories"))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "Bearer " + token)
+                    .build();
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .POST(ofFormData(data))
-                .uri(URI.create("http://localhost:9091/categories"))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + token)
-                .build();
+            HttpResponse<String> response;
+            try {
+                response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+                return Optional.empty();
+            }
 
-        HttpResponse<String> response;
-        try {
-            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            return Optional.empty();
-        }
-
-        if (response.statusCode() >= 200 && response.statusCode() <= 299) {
-            CategoryDTO categoryDTO = gson.fromJson(response.body(), CategoryDTO.class);
-            return Optional.of(categoryDTO);
-        } else {
-            return Optional.empty();
-        }
+            if (response.statusCode() >= 200 && response.statusCode() <= 299) {
+                CategoryDTO categoryDTO = gson.fromJson(response.body(), CategoryDTO.class);
+                return Optional.of(categoryDTO);
+            } else {
+                return Optional.empty();
+            }
+        } else return Optional.empty();
     }
 
     public Optional<CategoryDTO> update(final String name,

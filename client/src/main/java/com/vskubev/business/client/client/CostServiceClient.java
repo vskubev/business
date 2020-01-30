@@ -33,32 +33,34 @@ public class CostServiceClient {
                                     final String ownerId,
                                     final String categoryId,
                                     final OAuth2AccessToken token) {
-        Map<String, String> data = new HashMap<>();
-        data.put("price", price);
-        data.put("ownerId", ownerId);
-        data.put("categoryId", categoryId);
+        if (price != null && !price.isEmpty()) {
+            Map<String, String> data = new HashMap<>();
+            data.put("price", price);
+            data.put("ownerId", ownerId);
+            data.put("categoryId", categoryId);
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .POST(ofFormData(data))
-                .uri(URI.create("http://localhost:9091/costs"))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + token)
-                .build();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .POST(ofFormData(data))
+                    .uri(URI.create("http://localhost:9091/costs"))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "Bearer " + token)
+                    .build();
 
-        HttpResponse<String> response;
-        try {
-            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            return Optional.empty();
-        }
+            HttpResponse<String> response;
+            try {
+                response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+                return Optional.empty();
+            }
 
-        if (response.statusCode() >= 200 && response.statusCode() <= 299) {
-            CostDTO costDTO = gson.fromJson(response.body(), CostDTO.class);
-            return Optional.of(costDTO);
-        } else {
-            return Optional.empty();
-        }
+            if (response.statusCode() >= 200 && response.statusCode() <= 299) {
+                CostDTO costDTO = gson.fromJson(response.body(), CostDTO.class);
+                return Optional.of(costDTO);
+            } else {
+                return Optional.empty();
+            }
+        } else return Optional.empty();
     }
 
     public Optional<CostDTO> update(final String price,

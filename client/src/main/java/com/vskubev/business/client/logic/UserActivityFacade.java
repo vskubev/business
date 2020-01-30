@@ -1,7 +1,5 @@
 package com.vskubev.business.client.logic;
 
-import com.google.gson.Gson;
-import com.vskubev.business.client.client.UserServiceClient;
 import com.vskubev.business.client.enums.CategoryMethods;
 import com.vskubev.business.client.enums.CostMethods;
 import com.vskubev.business.client.enums.UserMethods;
@@ -22,29 +20,25 @@ import java.util.Arrays;
 @Component
 public class UserActivityFacade {
 
-    private final UserServiceClient userServiceClient;
-    private final Gson gson;
     private final UserActStrategy createUserActStrategy;
     private final UserActStrategy updateUserActStrategy;
     private final UserActStrategy deleteUserActStrategy;
     private final UserActStrategy getUserActStrategy;
     private final UserActStrategy getCurrentUserActStrategy;
     private final UserActStrategy getAllUserActStrategy;
-    private final CategoryActStrategy getCategoryActStrategy;
-    private final CategoryActStrategy getAllCategoryActStrategy;
-    private final CategoryActStrategy deleteCategoryActStrategy;
-    private final CategoryActStrategy createCategoryActStrategy;
-    private final CategoryActStrategy updateCategoryActStrategy;
-    private final CostActStrategy getAllCostActStrategy;
-    private final CostActStrategy getAllCostUserActStrategy;
-    private final CostActStrategy getCostActStrategy;
-    private final CostActStrategy createCostActStrategy;
-    private final CostActStrategy updateCostActStrategy;
-    private final CostActStrategy deleteCostActStrategy;
+    private final UserActStrategy getCategoryActStrategy;
+    private final UserActStrategy getAllCategoryActStrategy;
+    private final UserActStrategy deleteCategoryActStrategy;
+    private final UserActStrategy createCategoryActStrategy;
+    private final UserActStrategy updateCategoryActStrategy;
+    private final UserActStrategy getAllCostActStrategy;
+    private final UserActStrategy getAllCostUserActStrategy;
+    private final UserActStrategy getCostActStrategy;
+    private final UserActStrategy createCostActStrategy;
+    private final UserActStrategy updateCostActStrategy;
+    private final UserActStrategy deleteCostActStrategy;
 
-    public UserActivityFacade(UserServiceClient userServiceClient,
-                              Gson gson,
-                              CreateUserActStrategy createUserActStrategy,
+    public UserActivityFacade(CreateUserActStrategy createUserActStrategy,
                               UpdateUserActStrategy updateUserActStrategy,
                               DeleteUserActStrategy deleteUserActStrategy,
                               GetUserActStrategy getUserActStrategy,
@@ -61,8 +55,6 @@ public class UserActivityFacade {
                               CreateCostActStrategy createCostActStrategy,
                               UpdateCostActStrategy updateCostActStrategy,
                               DeleteCostActStrategy deleteCostActStrategy) {
-        this.userServiceClient = userServiceClient;
-        this.gson = gson;
         this.createUserActStrategy = createUserActStrategy;
         this.updateUserActStrategy = updateUserActStrategy;
         this.deleteUserActStrategy = deleteUserActStrategy;
