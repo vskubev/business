@@ -39,7 +39,7 @@ public class MainLogic {
 
             System.out.println("One more operation? Y/N");
             if ("N".equals(reader.readLine().toUpperCase())) {
-
+                break;
             }
         }
     }
