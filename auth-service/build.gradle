@@ -38,6 +38,7 @@ dependencies {
     compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.10.RELEASE'
 
     testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testCompile("org.assertj:assertj-core:3.11.1")
 }
 
 test {
