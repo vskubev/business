@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.server.ResponseStatusException;
@@ -39,9 +38,11 @@ class UserServiceImplTest {
     private User userSample2;
     private UserDTO userDTOSample1;
     private UserDTO userDTOSample2;
+    private LocalDateTime time;
 
     @BeforeEach
     public void init() {
+        time = LocalDateTime.now();
         userService = new UserServiceImpl(userRepository, userMapper, securityService);
         userSample1 = new User("First", "Password123321",
                 "First user name", "First@mail.test", time, time);
@@ -52,9 +53,6 @@ class UserServiceImplTest {
         userDTOSample2 = new UserDTO(0, "Second", "Password123321",
                 "Second user name", "Second@mail.test", time, time);
     }
-
-    private final LocalDateTime time = LocalDateTime.now();
-
 
     @Test
     public void createUserTestOk() {
@@ -75,7 +73,7 @@ class UserServiceImplTest {
 
     @Test
     public void updateUserTestOk() {
-        long userId = 1L;
+        long userId = 1;
         when(userRepository.findById(anyLong()))
                 .thenReturn(Optional.ofNullable(userSample1));
         when(userRepository.save(any(User.class)))
@@ -95,18 +93,20 @@ class UserServiceImplTest {
 
     @Test
     public void updateUserTestFail() {
-        long userId = 1L;
+        long userId = 1;
         when(userRepository.findById(anyLong()))
                 .thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> userService.update(userId, userDTOSample1))
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessage("404 NOT_FOUND");
+
+        Mockito.verify(userRepository, Mockito.times(1)).findById(userId);
     }
 
     @Test
     public void deleteByIdTestOk() {
-        long userId = 1L;
+        long userId = 1;
         userService.deleteById(userId);
 
         Mockito.verify(userRepository, Mockito.times(1)).deleteById(userId);
@@ -114,17 +114,19 @@ class UserServiceImplTest {
 
     @Test
     public void deleteByIdTestFail() {
-        long userId = 1L;
+        long userId = 1;
 
-        Mockito.doThrow(EmptyResultDataAccessException.class).when(userRepository).deleteById(userId);
+        Mockito.doThrow(new RuntimeException()).when(userRepository).deleteById(anyLong());
 
         assertThatThrownBy(() -> userService.deleteById(userId))
-                .isInstanceOf(EmptyResultDataAccessException.class);
+                .isInstanceOf(RuntimeException.class);
+
+        Mockito.verify(userRepository, Mockito.times(1)).deleteById(userId);
     }
 
     @Test
     public void getByIdTestOk() {
-        long userId = 1L;
+        long userId = 0;
         when(userRepository.findById(anyLong()))
                 .thenReturn(Optional.of(userSample1));
 
@@ -140,6 +142,7 @@ class UserServiceImplTest {
         Assert.assertEquals(userDTOSample1.getCreatedAt(), userDTO.getCreatedAt());
         Assert.assertEquals(userDTOSample1.getUpdatedAt(), userDTO.getUpdatedAt());
         Assert.assertTrue(userDTO.getPassword().isEmpty());
+
         Mockito.verify(securityService, Mockito.times(1)).getCurrentUser();
         Mockito.verify(userRepository, Mockito.times(1)).findById(userId);
     }
@@ -152,6 +155,8 @@ class UserServiceImplTest {
 
         assertThatThrownBy(() -> userService.getById(userId))
                 .isInstanceOf(ResponseStatusException.class);
+
+        Mockito.verify(userRepository, Mockito.times(1)).findById(userId);
     }
 
     @Test
@@ -164,11 +169,13 @@ class UserServiceImplTest {
         when(userRepository.findById(anyLong()))
                 .thenReturn(Optional.ofNullable(userSample2));
         when(user.getId())
-                .thenReturn(userId);
+                .thenReturn((long) 10);
 
         assertThatThrownBy(() -> userService.getById(userId))
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessage("403 FORBIDDEN");
+
+        Mockito.verify(userRepository, Mockito.times(1)).findById(userId);
     }
 
     @Test
@@ -186,6 +193,8 @@ class UserServiceImplTest {
         Assert.assertEquals(userDTOSample1.getUpdatedAt(), userDTO.getUpdatedAt());
         Assert.assertTrue(userDTO.getPassword().isEmpty());
         Mockito.verify(securityService, Mockito.times(1)).getCurrentUser();
+
+        Mockito.verify(securityService, Mockito.times(1)).getCurrentUser();
     }
 
     @Test
@@ -195,6 +204,8 @@ class UserServiceImplTest {
 
         assertThatThrownBy(() -> userService.getCurrentUser())
                 .isInstanceOf(AccessDeniedException.class);
+
+        Mockito.verify(securityService, Mockito.times(1)).getCurrentUser();
     }
 
     @Test
@@ -223,5 +234,7 @@ class UserServiceImplTest {
 
         assertThatThrownBy(() -> userService.getUsers())
                 .isInstanceOf(RuntimeException.class);
+
+        Mockito.verify(userRepository, Mockito.times(1)).findAll();
     }
 }

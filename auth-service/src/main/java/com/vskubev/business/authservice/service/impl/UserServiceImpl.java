@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
         User currentUser = securityService.getCurrentUser();
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not found"));
-        if (currentUser.getId() == user.getId()) {
+        if (currentUser.getId() == id) {
             return userMapper.toDTO(user);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
