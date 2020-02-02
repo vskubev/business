@@ -19,6 +19,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -45,9 +46,10 @@ class SecurityServiceImplTest {
     public void getCurrentUserTestOk() {
         when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
-        when(authentication.getPrincipal()).thenReturn(userSample1);
+        when(authentication.getName()).thenReturn(userSample1.getEmail());
+        when(authentication.getPrincipal()).thenReturn(userSample1.getEmail());
 
-        when(userRepository.findByEmail(any())).thenReturn(Optional.ofNullable(userSample1));
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.ofNullable(userSample1));
 
         User user = securityService.getCurrentUser();
 
@@ -58,7 +60,7 @@ class SecurityServiceImplTest {
         Assert.assertEquals(userSample1.getUpdatedAt(), user.getUpdatedAt());
         Assert.assertEquals(user.getHashPassword(), user.getHashPassword());
 
-        Mockito.verify(userRepository, Mockito.times(1)).findByEmail(any());
+        Mockito.verify(userRepository, Mockito.times(1)).findByEmail(anyString());
     }
 
     @Test
