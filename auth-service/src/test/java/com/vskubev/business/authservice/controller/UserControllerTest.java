@@ -1,8 +1,8 @@
 package com.vskubev.business.authservice.controller;
 
 
+import com.google.gson.Gson;
 import com.vskubev.business.authservice.map.UserDTO;
-import com.vskubev.business.authservice.model.User;
 import com.vskubev.business.authservice.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,22 +33,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerTest {
     @Autowired
     private UserService userService;
-
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private Gson gson;
 
-    private User userSample1;
     private UserDTO userDTOSample1;
-    private LocalDateTime time;
     List<UserDTO> userDTOList = new ArrayList<>();
 
     @BeforeEach
     public void init() {
-        time = LocalDateTime.now();
-        userSample1 = new User("First", "Password123321",
-                "First user name", "First@mail.test", time, time);
         userDTOSample1 = new UserDTO(0, "First", "Password123321",
-                "First user name", "First@mail.test", time, time);
+                "First user name", "First@mail.test", null, null);
     }
 
     @Test
@@ -59,7 +55,23 @@ class UserControllerTest {
 
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
-                .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    public void createUserTestOk() throws Exception {
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gson.toJson(userDTOSample1))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andReturn();
+    }
+
+    @Test
+    public void deleteTestOk() throws Exception {
+        long userId = 1;
+        mockMvc.perform(delete("/users/{id}", userId))
+                .andExpect(status().isNoContent());
     }
 }
