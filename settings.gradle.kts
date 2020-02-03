@@ -10,4 +10,5 @@
 rootProject.name = "business"
 include("auth-service")
 include("business-service")
+include("notification-service")
 include("client")
