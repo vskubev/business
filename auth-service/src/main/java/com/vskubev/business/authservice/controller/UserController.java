@@ -1,5 +1,6 @@
 package com.vskubev.business.authservice.controller;
 
+import com.google.gson.Gson;
 import com.vskubev.business.authservice.MessageSender;
 import com.vskubev.business.authservice.map.UserDTO;
 import com.vskubev.business.authservice.service.UserService;
@@ -21,6 +22,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final Gson gson;
     private final RabbitTemplate rabbitTemplate;
     private MessageSender messageSender;
     private String authExchange = "auth-exchange";
@@ -35,8 +37,10 @@ public class UserController {
     }
 
     public UserController(UserService userService,
+                          Gson gson,
                           RabbitTemplate rabbitTemplate) {
         this.userService = userService;
+        this.gson = gson;
         this.rabbitTemplate = rabbitTemplate;
     }
 
@@ -44,7 +48,7 @@ public class UserController {
     public ResponseEntity<UserDTO> create(@Valid @RequestBody UserDTO userDTO) {
         /* Sending to Message Queue */
         try {
-            messageSender.sendMessage(rabbitTemplate, authExchange, authRoutingKey, userDTO);
+            messageSender.sendMessage(rabbitTemplate, authExchange, authRoutingKey, gson.toJson(userDTO));
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(userService.create(userDTO));

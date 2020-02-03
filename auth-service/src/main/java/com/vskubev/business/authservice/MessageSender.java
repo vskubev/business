@@ -3,7 +3,10 @@ package com.vskubev.business.authservice;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,6 +16,19 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class MessageSender {
+
+    public ConnectionFactory connectionFactory() {
+        CachingConnectionFactory connectionFactory =
+                new CachingConnectionFactory("localhost");
+        connectionFactory.setUsername("rabbitmq");
+        connectionFactory.setPassword("rabbitmq");
+        return connectionFactory;
+    }
+    @Bean
+    public RabbitTemplate rabbitTemplate() {
+        return new RabbitTemplate(connectionFactory());
+    }
+
     /**
      *
      * @param rabbitTemplate
