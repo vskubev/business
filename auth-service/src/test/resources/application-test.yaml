@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: test
+  datasource:
+    url: jdbc:h2:mem:myDb;DB_CLOSE_DELAY=-1
+    username: eodes_spring
+    password: spring
+    driver-class-name: org.h2.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        hbm2ddl:
+          auto: create
