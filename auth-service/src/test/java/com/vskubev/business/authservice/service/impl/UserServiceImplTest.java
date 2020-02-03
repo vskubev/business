@@ -43,7 +43,7 @@ class UserServiceImplTest {
     @BeforeEach
     public void init() {
         time = LocalDateTime.now();
-        userService = new UserServiceImpl(userRepository, userMapper, securityService);
+        userService = new UserServiceImpl(userRepository, userMapper, securityService, template);
         userSample1 = new User("First", "Password123321",
                 "First user name", "First@mail.test", time, time);
         userSample2 = new User("Second", "Password123321",
