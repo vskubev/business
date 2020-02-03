@@ -105,6 +105,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
     @PreAuthorize("hasRole('ROLE_CLIENT')")
     public List<UserDTO> getUsers() {
         return userRepository.findAll().stream()
@@ -112,6 +113,7 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     @PreAuthorize("hasRole('ROLE_CLIENT')")
     public UserDTO getCurrentUser() {
         return userMapper.toDTO(securityService.getCurrentUser());

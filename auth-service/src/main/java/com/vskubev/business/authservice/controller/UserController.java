@@ -1,7 +1,7 @@
 package com.vskubev.business.authservice.controller;
 
 import com.vskubev.business.authservice.map.UserDTO;
-import com.vskubev.business.authservice.service.impl.UserServiceImpl;
+import com.vskubev.business.authservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +17,9 @@ import java.util.List;
 @Slf4j
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    public UserController(UserServiceImpl userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
