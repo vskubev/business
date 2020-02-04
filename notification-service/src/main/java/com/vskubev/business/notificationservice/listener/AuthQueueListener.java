@@ -1,4 +1,4 @@
-package com.vskubev.business.notificationservice;
+package com.vskubev.business.notificationservice.listener;
 
 import com.vskubev.business.notificationservice.message.SuccessfulRegistrationMessage;
 import lombok.extern.slf4j.Slf4j;

@@ -32,8 +32,8 @@ public class NotificationServiceApplication {
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory =
                 new CachingConnectionFactory("localhost");
-        connectionFactory.setUsername(applicationConfigReader.getAuthUsername());
-        connectionFactory.setPassword(applicationConfigReader.getAuthPassword());
+        connectionFactory.setUsername(applicationConfigReader.getUsername());
+        connectionFactory.setPassword(applicationConfigReader.getPassword());
         return connectionFactory;
     }
 

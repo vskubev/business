@@ -1,8 +1,11 @@
 package com.vskubev.business.businessservice.service.impl;
 
 import com.vskubev.business.businessservice.client.UserServiceClient;
+import com.vskubev.business.businessservice.configuration.RabbitConfiguration;
 import com.vskubev.business.businessservice.map.CategoryDTO;
 import com.vskubev.business.businessservice.map.CategoryMapper;
+import com.vskubev.business.businessservice.message.CreateCategoryMessage;
+import com.vskubev.business.businessservice.message.MessageSender;
 import com.vskubev.business.businessservice.model.Category;
 import com.vskubev.business.businessservice.repository.CategoryRepository;
 import com.vskubev.business.businessservice.service.CrudService;
@@ -29,13 +32,19 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
     private final UserServiceClient userServiceClient;
+    private final MessageSender messageSender;
+    private final RabbitConfiguration rabbitConfiguration;
 
     public CategoryServiceImpl(CategoryRepository categoryRepository,
                                CategoryMapper categoryMapper,
-                               UserServiceClient userServiceClient) {
+                               UserServiceClient userServiceClient,
+                               MessageSender messageSender,
+                               RabbitConfiguration rabbitConfiguration) {
         this.categoryRepository = categoryRepository;
         this.categoryMapper = categoryMapper;
         this.userServiceClient = userServiceClient;
+        this.messageSender = messageSender;
+        this.rabbitConfiguration = rabbitConfiguration;
     }
 
     @Override
@@ -54,7 +63,13 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
         category.setCreatedAt(localDateTime);
         category.setUpdatedAt(localDateTime);
 
-        return categoryMapper.toDTO(categoryRepository.save(category));
+        Category createdCategory = categoryRepository.save(category);
+
+        messageSender.sendMessage(rabbitConfiguration.getBusinessExchangeName(),
+                rabbitConfiguration.getBusinessRoutingKey(),
+                new CreateCategoryMessage(createdCategory.getName(), createdCategory.getOwnerId()));
+
+        return categoryMapper.toDTO(createdCategory);
     }
 
     @Override

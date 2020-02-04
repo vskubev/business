@@ -58,7 +58,9 @@ public class CategoryServiceClient {
             } else {
                 return Optional.empty();
             }
-        } else return Optional.empty();
+        } else {
+            return Optional.empty();
+        }
     }
 
     public Optional<CategoryDTO> update(final String name,
