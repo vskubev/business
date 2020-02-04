@@ -1,0 +1,22 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: rabbitmq
+    password: rabbitmq
+    listener:
+      simple:
+        concurrency: 4
+        max-concurrency: 8
+        retry:
+          initial-interval: 5000
+
+server:
+  port: 9093
+
+queue:
+  auth-exchange-name: auth-exchange
+  auth-queue-name: auth-queue
+  auth-routing-key: email_notification
+  auth_username: rabbitmq
+  auth_password: rabbitmq

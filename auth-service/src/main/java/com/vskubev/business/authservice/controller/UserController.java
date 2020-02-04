@@ -1,7 +1,8 @@
 package com.vskubev.business.authservice.controller;
 
+import com.google.gson.Gson;
 import com.vskubev.business.authservice.map.UserDTO;
-import com.vskubev.business.authservice.service.impl.UserServiceImpl;
+import com.vskubev.business.authservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +17,14 @@ import java.util.List;
 @RestController
 @Slf4j
 public class UserController {
-    private final UserServiceImpl userService;
 
-    public UserController(UserServiceImpl userService) {
+    private final UserService userService;
+    private final Gson gson;
+
+    public UserController(UserService userService,
+                          Gson gson) {
         this.userService = userService;
+        this.gson = gson;
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
