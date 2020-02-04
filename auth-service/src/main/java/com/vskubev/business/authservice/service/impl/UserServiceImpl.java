@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
                 new SuccessfulRegistrationMessage(createdUser.getEmail(), createdUser.getName())
         );
 
-        return userMapper.toDTO(userRepository.save(createdUser));
+        return userMapper.toDTO(createdUser);
     }
 
     @Override

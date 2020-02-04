@@ -16,4 +16,6 @@ public class ApplicationConfigReader {
     private String authExchangeName;
     private String authQueueName;
     private String authRoutingKey;
+    private String authUsername;
+    private String authPassword;
 }

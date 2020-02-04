@@ -10,6 +10,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author v.skubyev
+ */
 @ConfigurationProperties(prefix = "rabbit")
 @Component
 @Getter
@@ -17,12 +20,18 @@ import org.springframework.stereotype.Component;
 public class RabbitConfiguration {
     private String authExchangeName;
     private String authRoutingKey;
+    private String authUsername;
+    private String authPassword;
 
+
+    /**
+     * Bean for rabbitTemplate
+     */
     private ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory =
                 new CachingConnectionFactory("localhost");
-        connectionFactory.setUsername("rabbitmq");
-        connectionFactory.setPassword("rabbitmq");
+        connectionFactory.setUsername(getAuthUsername());
+        connectionFactory.setPassword(getAuthPassword());
         return connectionFactory;
     }
 

@@ -1,5 +1,7 @@
 package com.vskubev.business.authservice.service.impl;
 
+import com.vskubev.business.authservice.MessageSender;
+import com.vskubev.business.authservice.configuration.RabbitConfiguration;
 import com.vskubev.business.authservice.map.UserDTO;
 import com.vskubev.business.authservice.map.UserMapper;
 import com.vskubev.business.authservice.model.User;
@@ -32,6 +34,8 @@ class UserServiceImplTest {
     private UserRepository userRepository = mock(UserRepository.class);
     private SecurityService securityService = mock(SecurityServiceImpl.class);
     private UserMapper userMapper = new UserMapper();
+    private final MessageSender messageSender = mock(MessageSender.class);
+    private final RabbitConfiguration rabbitConfiguration = mock(RabbitConfiguration.class);
 
     private UserServiceImpl userService;
     private User userSample1;
@@ -43,7 +47,8 @@ class UserServiceImplTest {
     @BeforeEach
     public void init() {
         time = LocalDateTime.now();
-        userService = new UserServiceImpl(userRepository, userMapper, securityService, template, rabbitConfiguration);
+        userService = new UserServiceImpl(userRepository, userMapper, securityService,
+                messageSender, rabbitConfiguration);
         userSample1 = new User("First", "Password123321",
                 "First user name", "First@mail.test", time, time);
         userSample2 = new User("Second", "Password123321",
