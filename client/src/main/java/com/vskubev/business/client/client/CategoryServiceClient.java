@@ -138,7 +138,7 @@ public class CategoryServiceClient {
     public List<CategoryDTO> getAll(final OAuth2AccessToken token) {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .header("Authorization", "Bearer " + token.toString())
+                .header("Authorization", "Bearer " + token)
                 .uri(URI.create("http://localhost:9091/categories"))
                 .build();
 

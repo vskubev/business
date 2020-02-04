@@ -49,11 +49,11 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
 
     @Override
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public CategoryDTO create(CategoryDTO categoryDTO) {
+    public CategoryDTO create(CategoryDTO categoryDTO, String token) {
         checkInput(categoryDTO);
         checkCategoryUniqueness(categoryDTO);
 
-        if (!userServiceClient.getUserById(categoryDTO.getOwnerId()).isPresent()) {
+        if (!userServiceClient.getUserById(categoryDTO.getOwnerId(), token).isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not found");
         }
 

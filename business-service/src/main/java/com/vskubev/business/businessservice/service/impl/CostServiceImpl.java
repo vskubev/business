@@ -48,10 +48,10 @@ public class CostServiceImpl implements CrudService<CostDTO> {
 
     @Override
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public CostDTO create(CostDTO costDTO) {
+    public CostDTO create(CostDTO costDTO, String token) {
         checkInput(costDTO);
 
-        if (!userServiceClient.getUserById(costDTO.getOwnerId()).isPresent()) {
+        if (!userServiceClient.getUserById(costDTO.getOwnerId(), token).isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not found");
         }
 
@@ -105,8 +105,8 @@ public class CostServiceImpl implements CrudService<CostDTO> {
     }
 
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public List<CostDTO> getAllCostsUser() {
-        UserDTO userDTO = userServiceClient.getCurrentUser().orElseThrow(() ->
+    public List<CostDTO> getAllCostsUser(String token) {
+        UserDTO userDTO = userServiceClient.getCurrentUser(token).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not found"));
         long id = userDTO.getId();
         return costRepository.findAllByOwnerId(id).stream()

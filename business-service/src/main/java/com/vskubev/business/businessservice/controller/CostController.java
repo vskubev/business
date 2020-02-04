@@ -23,10 +23,11 @@ public class CostController {
     }
 
     @RequestMapping(value = "/costs", method = RequestMethod.POST)
-    public ResponseEntity<CostDTO> create(@Valid @RequestBody CostDTO costDTO) {
+    public ResponseEntity<CostDTO> create(@Valid @RequestBody CostDTO costDTO,
+                                          @RequestHeader("Authorization") String token) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(costService.create(costDTO));
+                .body(costService.create(costDTO, token));
     }
 
     @RequestMapping(value = "/costs/{costId}", method = RequestMethod.PUT)
@@ -54,10 +55,10 @@ public class CostController {
     }
 
     @RequestMapping(value = "/costs", method = RequestMethod.GET)
-    public ResponseEntity<List<CostDTO>> getAllCostsUser() {
+    public ResponseEntity<List<CostDTO>> getAllCostsUser(@RequestHeader("Authorization") String token) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(costService.getAllCostsUser());
+                .body(costService.getAllCostsUser(token));
     }
 
     @RequestMapping(value = "/costs/all", method = RequestMethod.GET)

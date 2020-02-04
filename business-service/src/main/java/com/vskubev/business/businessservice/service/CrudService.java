@@ -5,7 +5,7 @@ package com.vskubev.business.businessservice.service;
  */
 public interface CrudService<T> {
 
-    T create(T entity);
+    T create(T entity, String token);
 
     void deleteById(long id);
 

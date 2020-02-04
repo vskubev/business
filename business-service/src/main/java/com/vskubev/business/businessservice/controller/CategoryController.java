@@ -23,10 +23,11 @@ public class CategoryController {
     }
 
     @RequestMapping(value = "/categories", method = RequestMethod.POST)
-    public ResponseEntity<CategoryDTO> create(@Valid @RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<CategoryDTO> create(@Valid @RequestBody CategoryDTO categoryDTO,
+                                              @RequestHeader("Authorization") String token) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(categoryService.create(categoryDTO));
+                .body(categoryService.create(categoryDTO, token));
     }
 
     @RequestMapping(value = "/categories/{categoryId}", method = RequestMethod.PUT)
