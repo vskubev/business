@@ -23,6 +23,7 @@ public class AuthQueueListener {
         log.info("Received message: {} from auth queue.", data);
 
         final String email = data.getEmail();
+        final String subject = "Hello from site.org";
         final String message = String.format("Welcome dear %s. Blablabla...", data.getName());
 
         /*
