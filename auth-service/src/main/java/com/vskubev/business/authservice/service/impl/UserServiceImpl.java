@@ -1,7 +1,10 @@
 package com.vskubev.business.authservice.service.impl;
 
+import com.vskubev.business.authservice.MessageSender;
+import com.vskubev.business.authservice.configuration.RabbitConfiguration;
 import com.vskubev.business.authservice.map.UserDTO;
 import com.vskubev.business.authservice.map.UserMapper;
+import com.vskubev.business.authservice.message.SuccessfulRegistrationMessage;
 import com.vskubev.business.authservice.model.User;
 import com.vskubev.business.authservice.repository.UserRepository;
 import com.vskubev.business.authservice.service.SecurityService;
@@ -29,13 +32,19 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final SecurityService securityService;
+    private final MessageSender messageSender;
+    private final RabbitConfiguration rabbitConfiguration;
 
     public UserServiceImpl(UserRepository userRepository,
                            UserMapper userMapper,
-                           SecurityService securityService) {
+                           SecurityService securityService,
+                           MessageSender messageSender,
+                           RabbitConfiguration rabbitConfiguration) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.securityService = securityService;
+        this.messageSender = messageSender;
+        this.rabbitConfiguration = rabbitConfiguration;
     }
 
     @Override
@@ -50,7 +59,15 @@ public class UserServiceImpl implements UserService {
         user.setCreatedAt(localDateTime);
         user.setUpdatedAt(localDateTime);
 
-        return userMapper.toDTO(userRepository.save(user));
+        User createdUser = userRepository.save(user);
+
+        messageSender.sendMessage(
+                rabbitConfiguration.getAuthExchangeName(),
+                rabbitConfiguration.getAuthRoutingKey(),
+                new SuccessfulRegistrationMessage(createdUser.getEmail(), createdUser.getName())
+        );
+
+        return userMapper.toDTO(userRepository.save(createdUser));
     }
 
     @Override

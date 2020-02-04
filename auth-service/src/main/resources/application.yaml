@@ -19,3 +19,7 @@ spring:
 
 server:
   port: 9090
+
+rabbit:
+  auth-exchange-name: auth-exchange
+  auth-routing-key: email_notification

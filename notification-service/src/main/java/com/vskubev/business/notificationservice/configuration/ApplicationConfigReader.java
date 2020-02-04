@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 @Data
 @NoArgsConstructor
 public class ApplicationConfigReader {
-
     private String authExchangeName;
     private String authQueueName;
     private String authRoutingKey;
