@@ -10,12 +10,14 @@ import com.vskubev.business.businessservice.model.Category;
 import com.vskubev.business.businessservice.repository.CategoryRepository;
 import com.vskubev.business.businessservice.service.CrudService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,6 +31,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CategoryServiceImpl implements CrudService<CategoryDTO> {
 
+    @Autowired
+    private HttpServletRequest request;
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
     private final UserServiceClient userServiceClient;
@@ -49,7 +53,9 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
 
     @Override
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public CategoryDTO create(CategoryDTO categoryDTO, String token) {
+    public CategoryDTO create(CategoryDTO categoryDTO) {
+        String token = request.getHeader("Authorization");
+
         checkInput(categoryDTO);
         checkCategoryUniqueness(categoryDTO);
 

@@ -13,6 +13,11 @@ import org.springframework.stereotype.Component;
 @EnableRabbit
 @Slf4j
 public class BusinessQueueListener {
+    /**
+     * Message listener
+     *
+     * @param data a user defined object used for deserialization of message
+     */
     @RabbitListener(queues = "business-queue")
     public void receiveMessageForBusiness(CreateCategoryMessage data) {
         log.info("Received message: {} from business queue.", data);

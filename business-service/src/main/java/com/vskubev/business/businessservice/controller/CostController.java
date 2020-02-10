@@ -23,11 +23,10 @@ public class CostController {
     }
 
     @RequestMapping(value = "/costs", method = RequestMethod.POST)
-    public ResponseEntity<CostDTO> create(@Valid @RequestBody CostDTO costDTO,
-                                          @RequestHeader("Authorization") String token) {
+    public ResponseEntity<CostDTO> create(@Valid @RequestBody CostDTO costDTO) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(costService.create(costDTO, token));
+                .body(costService.create(costDTO));
     }
 
     @RequestMapping(value = "/costs/{costId}", method = RequestMethod.PUT)

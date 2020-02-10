@@ -10,12 +10,14 @@ import com.vskubev.business.businessservice.model.Cost;
 import com.vskubev.business.businessservice.repository.CostRepository;
 import com.vskubev.business.businessservice.service.CrudService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +30,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CostServiceImpl implements CrudService<CostDTO> {
 
+    @Autowired
+    private HttpServletRequest request;
     private final CostRepository costRepository;
     private final CostMapper costMapper;
     private final CategoryServiceImpl categoryService;
@@ -48,7 +52,8 @@ public class CostServiceImpl implements CrudService<CostDTO> {
 
     @Override
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public CostDTO create(CostDTO costDTO, String token) {
+    public CostDTO create(CostDTO costDTO) {
+        String token = request.getHeader("Authorization");
         checkInput(costDTO);
 
         if (!userServiceClient.getUserById(costDTO.getOwnerId(), token).isPresent()) {
