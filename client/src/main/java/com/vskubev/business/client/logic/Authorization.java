@@ -49,7 +49,6 @@ public class Authorization {
         return token;
     }
 
-    //TODO избавиться от NPE при авторизации новым юзером
     public OAuth2AccessToken signUp() throws IOException {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(System.in));

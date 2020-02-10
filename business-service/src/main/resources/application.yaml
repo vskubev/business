@@ -22,3 +22,9 @@ server:
 
 api:
   auth-service-url: http://localhost:9090
+
+rabbit:
+  business-exchange-name: business-exchange
+  business-routing-key: create_category_notification
+  business-username: rabbitmq
+  business-password: rabbitmq

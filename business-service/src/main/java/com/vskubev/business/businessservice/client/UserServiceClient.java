@@ -30,11 +30,16 @@ public class UserServiceClient {
         this.apiConfig = apiConfig;
     }
 
-    public Optional<UserDTO> getUserById(final long userId) {
+    public Optional<UserDTO> getUserById(final long userId, final String token) {
+        StringBuilder requestUri = new StringBuilder();
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .header("Authorization", "token")
-                .uri(URI.create(apiConfig.getAuthServiceUrl() + "/users/" + userId))
+                .header("Authorization", token)
+                .uri(URI.create(requestUri
+                        .append(apiConfig.getAuthServiceUrl())
+                        .append("/users/")
+                        .append(userId)
+                        .toString()))
                 .build();
 
         HttpResponse<String> response;
@@ -56,11 +61,15 @@ public class UserServiceClient {
         }
     }
 
-    public Optional<UserDTO> getCurrentUser() {
+    public Optional<UserDTO> getCurrentUser(final String token) {
+        StringBuilder requestUri = new StringBuilder();
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .header("Authorization", "token")
-                .uri(URI.create(apiConfig.getAuthServiceUrl() + "/users/current"))
+                .header("Authorization", token)
+                .uri(URI.create(requestUri
+                        .append(apiConfig.getAuthServiceUrl())
+                        .append("/users/current")
+                        .toString()))
                 .build();
 
         HttpResponse<String> response;

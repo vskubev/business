@@ -105,7 +105,9 @@ public class UserServiceClient {
             } else {
                 return Optional.empty();
             }
-        } else return Optional.empty();
+        } else {
+            return Optional.empty();
+        }
     }
 
     public void delete(final long userId,
@@ -127,7 +129,7 @@ public class UserServiceClient {
                                      final OAuth2AccessToken token) {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .header("Authorization", "Bearer " + token.toString())
+                .header("Authorization", "Bearer " + token)
                 .uri(URI.create("http://localhost:9090/users/" + userId))
                 .build();
 
@@ -152,7 +154,7 @@ public class UserServiceClient {
     public Optional<UserDTO> getCurrentUser(final OAuth2AccessToken token) {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .header("Authorization", "Bearer " + token.toString())
+                .header("Authorization", "Bearer " + token)
                 .uri(URI.create("http://localhost:9090/users/current"))
                 .build();
 
@@ -177,7 +179,7 @@ public class UserServiceClient {
     public List<UserDTO> getAll(final OAuth2AccessToken token) {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .header("Authorization", "Bearer " + token.toString())
+                .header("Authorization", "Bearer " + token)
                 .uri(URI.create("http://localhost:9090/users"))
                 .build();
 

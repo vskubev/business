@@ -1,18 +1,23 @@
 package com.vskubev.business.businessservice.service.impl;
 
 import com.vskubev.business.businessservice.client.UserServiceClient;
+import com.vskubev.business.businessservice.configuration.RabbitConfiguration;
 import com.vskubev.business.businessservice.map.CategoryDTO;
 import com.vskubev.business.businessservice.map.CategoryMapper;
+import com.vskubev.business.businessservice.message.CreateCategoryMessage;
+import com.vskubev.business.businessservice.message.MessageSender;
 import com.vskubev.business.businessservice.model.Category;
 import com.vskubev.business.businessservice.repository.CategoryRepository;
 import com.vskubev.business.businessservice.service.CrudService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,25 +31,35 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CategoryServiceImpl implements CrudService<CategoryDTO> {
 
+    @Autowired
+    private HttpServletRequest request;
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
     private final UserServiceClient userServiceClient;
+    private final MessageSender messageSender;
+    private final RabbitConfiguration rabbitConfiguration;
 
     public CategoryServiceImpl(CategoryRepository categoryRepository,
                                CategoryMapper categoryMapper,
-                               UserServiceClient userServiceClient) {
+                               UserServiceClient userServiceClient,
+                               MessageSender messageSender,
+                               RabbitConfiguration rabbitConfiguration) {
         this.categoryRepository = categoryRepository;
         this.categoryMapper = categoryMapper;
         this.userServiceClient = userServiceClient;
+        this.messageSender = messageSender;
+        this.rabbitConfiguration = rabbitConfiguration;
     }
 
     @Override
     @PreAuthorize("hasRole('ROLE_CLIENT')")
     public CategoryDTO create(CategoryDTO categoryDTO) {
+        String token = request.getHeader("Authorization");
+
         checkInput(categoryDTO);
         checkCategoryUniqueness(categoryDTO);
 
-        if (!userServiceClient.getUserById(categoryDTO.getOwnerId()).isPresent()) {
+        if (!userServiceClient.getUserById(categoryDTO.getOwnerId(), token).isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not found");
         }
 
@@ -54,7 +69,13 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
         category.setCreatedAt(localDateTime);
         category.setUpdatedAt(localDateTime);
 
-        return categoryMapper.toDTO(categoryRepository.save(category));
+        Category createdCategory = categoryRepository.save(category);
+
+        messageSender.sendMessage(rabbitConfiguration.getBusinessExchangeName(),
+                rabbitConfiguration.getBusinessRoutingKey(),
+                new CreateCategoryMessage(createdCategory.getName(), createdCategory.getOwnerId()));
+
+        return categoryMapper.toDTO(createdCategory);
     }
 
     @Override
