@@ -11,6 +11,8 @@ import com.vskubev.business.businessservice.repository.CategoryRepository;
 import com.vskubev.business.businessservice.service.CrudService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -103,6 +105,7 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
 
     @Override
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @CacheEvict("categories")
     public void deleteById(long id) {
         try {
             categoryRepository.deleteById(id);
@@ -114,13 +117,17 @@ public class CategoryServiceImpl implements CrudService<CategoryDTO> {
 
     @Override
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable("categories")
     public CategoryDTO getById(long id) {
+        log.info("getting category by id: {}", id);
         Category category = categoryRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category is not found"));
         return categoryMapper.toDTO(category);
     }
 
+    @Cacheable("categoriesList")
     public List<CategoryDTO> getCategories() {
+        log.info("getting categories");
         return categoryRepository.findAll().stream()
                 .map(categoryMapper::toDTO)
                 .collect(Collectors.toList());
