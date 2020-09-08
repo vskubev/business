@@ -3,6 +3,7 @@ package com.vskubev.business.businessservice.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "categories")
-public class Category {
+public class Category implements Serializable {
 
     /**
      * id

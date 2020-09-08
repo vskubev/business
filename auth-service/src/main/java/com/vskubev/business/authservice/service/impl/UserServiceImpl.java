@@ -10,6 +10,8 @@ import com.vskubev.business.authservice.repository.UserRepository;
 import com.vskubev.business.authservice.service.SecurityService;
 import com.vskubev.business.authservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -100,6 +102,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @CacheEvict("users")
     public void deleteById(long id) {
         try {
             userRepository.deleteById(id);
@@ -111,6 +114,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable("users")
     public UserDTO getById(long id) {
         User currentUser = securityService.getCurrentUser();
         User user = userRepository.findById(id)
@@ -124,6 +128,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable("usersList")
     public List<UserDTO> getUsers() {
         return userRepository.findAll().stream()
                 .map(userMapper::toDTO)

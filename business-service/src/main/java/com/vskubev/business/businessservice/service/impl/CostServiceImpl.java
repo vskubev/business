@@ -11,6 +11,8 @@ import com.vskubev.business.businessservice.repository.CostRepository;
 import com.vskubev.business.businessservice.service.CrudService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -92,6 +94,7 @@ public class CostServiceImpl implements CrudService<CostDTO> {
 
     @Override
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @CacheEvict("costs")
     public void deleteById(long id) {
         try {
             costRepository.deleteById(id);
@@ -103,6 +106,7 @@ public class CostServiceImpl implements CrudService<CostDTO> {
 
     @Override
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable("costs")
     public CostDTO getById(long id) {
         Cost cost = costRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cost is not found"));
@@ -110,6 +114,7 @@ public class CostServiceImpl implements CrudService<CostDTO> {
     }
 
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable("userCostsList")
     public List<CostDTO> getAllCostsUser(String token) {
         UserDTO userDTO = userServiceClient.getCurrentUser(token).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not found"));
@@ -119,6 +124,7 @@ public class CostServiceImpl implements CrudService<CostDTO> {
                 .collect(Collectors.toList());
     }
 
+    @Cacheable("costsList")
     public List<CostDTO> getAllCosts() {
         return costRepository.findAll().stream()
                 .map(costMapper::toDTO)
